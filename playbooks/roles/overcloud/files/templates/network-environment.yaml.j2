@@ -1,0 +1,43 @@
+resource_registry:
+  OS::TripleO::Compute::Net::SoftwareConfig: /home/stack/templates/nic-configs/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig: /home/stack/templates/nic-configs/controller.yaml
+{% if overcloud_ceph_enabled | bool %}
+  OS::TripleO::CephStorage::Net::SoftwareConfig: /home/stack/templates/nic-configs/ceph-storage.yaml
+{% endif %}
+
+parameter_defaults:
+  ControlPlaneSubnetCidr: '22'
+  ControlPlaneDefaultRoute: 192.168.24.1
+  EC2MetadataIp: 192.168.24.1
+  InternalApiNetCidr: 172.29.236.0/22
+  StorageNetCidr: 172.29.244.0/22
+  StorageMgmtNetCidr: 172.29.240.0/22
+  TenantNetCidr: 172.29.248.0/22
+  ExternalNetCidr: 10.239.0.0/22
+  ManagementNetCidr: 10.240.0.0/22
+  InternalApiNetworkVlanID: 2060
+  StorageNetworkVlanID: 2061
+  StorageMgmtNetworkVlanID: 2062
+  TenantNetworkVlanID: 2070
+  ExternalNetworkVlanID: 2063
+  ManagementNetworkVlanID: 2059
+{% if overcloud_manila_backend == "cephfsnfs" %}
+  StorageNFSNetCidr: {{ overcloud_storagenfs_cidr }}
+  StorageNFSNetworkVlanID: {{ overcloud_storagenfs_vlan }}
+  StorageNFSAllocationPools: [{'start': '{{ overcloud_storagenfs_allocation[0] }}', 'end': '{{ overcloud_storagenfs_allocation[1] }}'}]
+{% endif %}
+  InternalApiAllocationPools: [{'start': '172.29.236.58', 'end': '172.29.239.250'}]
+  StorageAllocationPools: [{'start': '172.29.244.54', 'end': '172.29.247.250'}]
+  StorageMgmtAllocationPools: [{'start': '172.29.240.54', 'end': '172.29.243.250'}]
+  TenantAllocationPools: [{'start': '172.29.248.54', 'end': '172.29.251.250'}]
+  ExternalAllocationPools: [{'start': '10.239.0.54', 'end': '10.239.0.250'}]
+  ManagementAllocationPools: [{'start': '10.240.0.54', 'end': '10.240.0.250'}]
+  ExternalInterfaceDefaultRoute: 10.239.0.1
+  ManagementInterfaceDefaultRoute: 10.240.0.1
+  DnsServers: ["69.20.0.164","69.20.0.196"]
+  #NeutronNetworkType: 'vxlan,vlan'
+  #NeutronTunnelTypes: 'vxlan'
+  NeutronEnableIsolatedMetadata: true
+  BondInterfaceOvsOptions: "mode=active-backup"
+  PublicVirtualFixedIPs: [{'ip_address':'10.239.0.10'}]
+  NetworkDeploymentActions: ['CREATE','UPDATE']

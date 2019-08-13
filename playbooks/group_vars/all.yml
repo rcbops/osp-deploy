@@ -1,0 +1,46 @@
+# Copyright 2019, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+# # Redhat Registration
+# rh_user: "{{ lookup('env', 'RPC_RH_USER') }}"
+# rh_password: "{{ lookup('env', 'RPC_RH_PASS') }}"
+# redhat_pool_id: "{{ lookup('env', 'RPC_POOL_ID') }}"
+
+# Enable Open Virutal Networking plugin
+overcloud_ovn_enabled: true
+
+# Enable CEPH, and RadosGW
+overcloud_ceph_enabled: true
+
+# Enable Octavia Load Balancing 
+overcloud_octavia_enabled: true
+
+# Enable Sahara OpenStack Data Processing Services
+overcloud_sahara_enabled: true
+
+# Enable Barbican Key Storage Services
+overcloud_barbican_enabled: true
+
+# Enable OpenStack Shared File System Storage
+overcloud_manila_enabled: false
+# Manila Storage backend, available options are cephfsnative, netapp, cephfsganesha
+# Currently only support cephfsnative 
+# Disabling for cephnfs testing - 
+# overcloud_manila_backend: "cephfsnative"
+overcloud_manila_backend: "cephfsganesha"
+
+# Enable Local Docker image Registry, if false, it will use the remote registry
+overcloud_enable_local_registry: true
+overcloud_rhn_enabled: true

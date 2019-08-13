@@ -1,0 +1,12 @@
+# More params can be set here:
+# https://access.redhat.com/documentation/en-us/red_hat_openstack_platform/13/html/manage_secrets_with_openstack_key_manager/installing_barbican
+parameter_defaults:
+  BarbicanSimpleCryptoGlobalDefault: true
+positron:templates ant$ cat manila-cephfsnative-config.yaml.j2
+parameter_defaults:
+  ManilaCephFSNativeBackendName: cephfsnative
+  ManilaCephFSNativeDriverHandlesShareServers: false
+  ManilaCephFSNativeCephFSConfPath: '/etc/ceph/ceph.conf'
+  ManilaCephFSNativeCephFSAuthId: 'manila'
+  ManilaCephFSNativeCephFSClusterName: 'ceph'
+  ManilaCephFSNativeCephFSEnableSnapshots: true

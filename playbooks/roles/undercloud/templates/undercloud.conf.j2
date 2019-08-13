@@ -1,0 +1,36 @@
+[DEFAULT]
+
+undercloud_hostname = {{ undercloud_hostname }}
+local_ip = {{ undercloud_local_ip }}
+local_subnet = ctlplane-subnet
+local_interface = {{ undercloud_local_interface }}
+local_mtu = {{ undercloud_local_mtu }}
+
+undercloud_public_host = {{ undercloud_public_host }}
+undercloud_admin_host = {{ undercloud_admin_host }}
+undercloud_nameservers = {{ undercloud_name_servers | join(',') }}
+undercloud_ntp_servers = {{ undercloud_ntp_servers | join(',') }}
+undercloud_service_certificate = {{ undercloud_service_certificate }}
+undercloud_debug = {{ undercloud_debug }}
+undercloud_update_packages = {{ undercloud_update_packages }}
+discovery_default_driver = {{ undercloud_discovery_default_driver }}
+enable_tempest = {{ undercloud_enable_tempest }}
+enable_ui = {{ undercloud_enable_ui }}
+ipxe_enabled = {{ undercloud_ipxe_enabled }}
+clean_nodes = {{ undercloud_clean_nodes }}
+enabled_hardware_types = {{ undercloud_enabled_hardware_types }} 
+inspection_enable_uefi = {{ undercloud_inspection_enable_uefi }}
+discovery_default_driver = {{ undercloud_discovery_default_driver }}
+overcloud_domain_name = {{ undercloud_hostname.split('.', 1)[1] }}
+generate_service_certificate: {{ undercloud_generate_service_certificate }}
+
+[auth]
+
+[ctlplane-subnet]
+
+cidr = {{ undercloud_network_cidr }}
+dhcp_start = {{ undercloud_dhcp_start }}
+dhcp_end = {{ undercloud_dhcp_end }}
+inspection_iprange = {{ undercloud_inspection_iprange | join(',') }}
+gateway = {{ undercloud_inspection_gateway }} 
+masquerade = {{ undercloud_masquerade }} 

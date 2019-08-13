@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+
+openstack overcloud container image prepare \
+    --namespace=registry.access.redhat.com/rhosp13 \
+{% if overcloud_enable_local_registry | bool %}
+    --push-destination=192.168.24.1:8787 \
+{% endif %}
+    --prefix=openstack- \
+{% if overcloud_ovn_enabled | bool %}
+    -e /usr/share/openstack-tripleo-heat-templates/environments/services/neutron-ovn-ha.yaml \
+{% endif %}
+{% if overcloud_octavia_enabled | bool %}
+    -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/octavia.yaml \
+{% endif %}
+{% if overcloud_sahara_enabled | bool %}
+    -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/sahara.yaml \
+{% endif %}
+{% if overcloud_barbican_enabled | bool %}
+    -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/barbican.yaml \
+    -e /usr/share/openstack-tripleo-heat-templates/environments/barbican-backend-simple-crypto.yaml \
+    -e /home/stack/templates/46-barbican-config.yaml \
+{% endif %}
+{% if overcloud_manila_enabled | bool %}
+    -e  /usr/share/openstack-tripleo-heat-templates/environments/services-docker/manila.yaml \
+{% endif %}
+{% if overcloud_ceph_enabled  | bool %}
+    -e /usr/share/openstack-tripleo-heat-templates/environments/ceph-ansible/ceph-ansible.yaml \
+    --set ceph_namespace=registry.access.redhat.com/rhceph \
+    --set ceph_image=rhceph-3-rhel7 \
+{% endif %}
+    --tag-from-label {version}-{release} \
+    --output-env-file=/home/stack/templates/overcloud_images.yaml \
+    --output-images-file /home/stack/local_registry_images.yaml
+
+{% if overcloud_enable_local_registry | bool %}
+sudo openstack overcloud container image upload \
+    --config-file /home/stack/local_registry_images.yaml \
+    --verbose
+{% endif %}

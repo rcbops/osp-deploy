@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -eux
+
+#
+## Start deployment $(date +%F)
+#
+
+# If we have any enviornment variables that we need to set for deploying
+# the undercloud, we can set that here
+{% for var in (undercloud_env_vars|default([])) %}
+export {{ var }}
+{% endfor %}
+
+# Run the installation command
+{{ undercloud_install_cmd }} {{ undercloud_install_cli_options }}
+
+#
+## End deployment $(date +%F)
+#

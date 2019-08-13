@@ -1,0 +1,105 @@
+# Copyright 2019, Rackspace US, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+
+# We need to register the vm with redhat so we can pull
+# the packages needed 
+# The credentials are saved in the undercloud group_vars
+# or defined on the command line 
+- name: Register Subscription
+  redhat_subscription:
+    state: present
+    username: "{{ rh_user }}"
+    password: "{{ rh_password }}"
+    auto_attach: true
+    pool_ids: "{{ redhat_pool_id }}"
+  tags:
+    - repositories
+
+# By default we should have all repositories disabled on 
+# installation, lets only enable the ones that we need
+# for osp
+#
+- name: Enable needed RHSM repositories
+  rhsm_repository:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    "{{ enabled_repositories }}"
+  register: rhsm_repository
+  tags:
+    - repositories
+
+# Install the packages needed for installing 
+# the undercloud 
+- name: Install required packages
+  package:
+    name: "{{ undercloud_packages }}"
+    state: latest
+  tags:
+    - "packages"
+
+# Run a package update and notfiy the reboot
+# handler
+- name: Update all packages
+  package: 
+    name: "*"
+    state: latest
+  notify:
+   - "Reboot Host"
+
+- name: Flush handlers
+  meta: flush_handlers
+
+# Now we are going to create the undercloud 
+# configuration. This will be used by the installer
+- name: Create undercloud configuration
+  template:
+    src: "{{ undercloud_config_file }}"
+    dest: "/home/stack/undercloud.conf"
+    mode: 0600
+    owner: stack
+    group: stack
+
+# Copy over some utility scripts to ease administration
+- name: Copy over admin utilities
+  synchronize:
+    src: utilities
+    dest: /home/stack
+    owner: true
+    group: true
+  tags:
+    - utilities
+    
+# We are going to create a install script
+# so we can enable better logging of the 
+# installation
+- name: Create undercloud install script
+  template:
+    src: "{{ undercloud_install_script }}"
+    dest: "/home/stack/undercloud-install.sh"
+    mode: 0755
+    owner: stack
+    group: stack
+  tags:
+    - undercloud
+
+# Start the installer
+- name: Install the undercloud
+  become: yes
+  become_user: stack
+  command: "/home/stack/undercloud-install.sh"
+  tags:
+    - install_undercloud
