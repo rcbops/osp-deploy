@@ -21,10 +21,11 @@ cd scripts
 ```
 
 # TODO
-Automate networking template generation, or make it easier to generate based on deploy scenario
-Automate SSL Cert generation and options, currently using a self signed
-Move settings to a better template/config structure that can be extracted out for a seperate configuration repo per environment
-Move to specifiying template directory to avoid having to use config file naming in the deploy_overcloud template.
-Cleanup
-Add configuration capture script for capturing working config and making a config repo that can then be deployed.
-Add simple RHEL Kickstart ISO/USB for getting directory on-line
+
+* Automate networking template generation, or make it easier to generate based on deploy scenario
+* Automate SSL Cert generation and options, currently using a self signed
+* Move settings to a better template/config structure that can be extracted out for a seperate configuration repo per environment
+* Move to specifiying template directory to avoid having to use config file naming in the deploy_overcloud template.
+* Add configuration capture script for capturing working config and making a config repo that can then be deployed.
+* Add simple RHEL Kickstart ISO/USB for getting directory on-line
+* Cleanup
