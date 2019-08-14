@@ -73,8 +73,6 @@
     - scripts
     - utilities
 
-# copy cert file
-- name: 
 # Now we are going to create the undercloud 
 # configuration. This will be used by the installer
 - name: Create undercloud configuration
