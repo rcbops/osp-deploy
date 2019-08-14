@@ -44,3 +44,5 @@ overcloud_manila_backend: "cephfsganesha"
 # Enable Local Docker image Registry, if false, it will use the remote registry
 overcloud_enable_local_registry: true
 overcloud_rhn_enabled: true
+
+undercloud_uefi_flavors: false

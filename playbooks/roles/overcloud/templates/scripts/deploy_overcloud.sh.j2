@@ -41,7 +41,3 @@ openstack overcloud deploy --templates \
 {% endif %}
    --ntp-server {{ undercloud_ntp_servers[0] }} \
    2>&1 | tee /home/stack/logs/overcloud_install.log
-
-{% if overcloud_rhn_enabled | bool %}
-ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i /usr/bin/tripleo-ansible-inventory /home/stack/ansible-osp-registration.yml
-{% endif %}

@@ -39,8 +39,9 @@
 
 - name: Stat the instackenv.json file
   stat:
-    path: files/instackenv.json
+    path: "files/instackenv.json"
   register: instackenv
+  delegate_to: localhost
 
 - debug: var=instackenv
 
@@ -51,6 +52,7 @@
         dest: /home/stack/instackenv.json
         owner: "stack"
         group: "stack"
+        remote_src: no
       tags:
         - nodes
     - shell: |
@@ -111,7 +113,8 @@
   with_items:
     - "{{ flavor_list.stdout_lines }}"
   tags: 
-    - flavor_update   
+    - flavor_update
+  when: undercloud_uefi_flavors | bool   
 
 - name: Install templates 
   block:

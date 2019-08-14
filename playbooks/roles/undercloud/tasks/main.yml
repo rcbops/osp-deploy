@@ -88,8 +88,6 @@
   synchronize:
     src: utilities
     dest: /home/stack
-    owner: true
-    group: true
   tags:
     - utilities
     

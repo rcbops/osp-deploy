@@ -93,4 +93,3 @@ undercloud_enable_ironic: true
 undercloud_ipxe_enabled: true
 undercloud_clean_nodes: true
 undercloud_enabled_hardware_types: "ipmi"
-
