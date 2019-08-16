@@ -49,16 +49,16 @@
       tags: 
         - "checks"
 
-#    - name: Verify that interfaces exist
-#      assert:
-#        that: 
-#        - item in ansible_interfaces 
-#        msg:
-#          "Host does not have the needed interfaces configuired, please configure the {{ item }} bridge"
-#      with_items:
-#        - "{{ host_interfaces }}"
-#      tags:
-#        - "checks"
+    - name: Verify that interfaces exist
+      assert:
+        that: 
+        - item in ansible_interfaces 
+        msg:
+          "Host does not have the needed interfaces configuired, please configure the {{ item }} bridge"
+      with_items:
+        - "{{ host_interfaces }}"
+      tags:
+        - "checks"
 
     - name: Add libvirt group to stack user
       user: 
