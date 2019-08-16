@@ -4,9 +4,18 @@ Deploys Red Hat OpenStack Platform 13
 Work in Progress, for lab use only currently
 
 ```
+# provision RHEL 7 or CentOS node as KVM virtualization host
 git clone https://gitlab.com/antonym/osp-deploy.git /opt/osp-deploy
 cd /opt/osp-deploy
-# modify playbooks/inventory and add RHEL 7 director node IP
+# setup a director vm
+# will need to make sure to have bridges present in NIC configs or can be simulated for testing
+#
+# br-ctlplane
+# br-ex 
+# br-ipmi
+#
+# ex. brcrl add <bridge> for simulation
+./prepare_vm.sh
 # modify group_vars/undercloud.yml for undercloud overrides, anything set in undercloud.conf
 ./deploy_director.sh
 # director/undercloud node will be deployed
