@@ -27,6 +27,11 @@ host_packages:
 pip_packages:
   - "libvirt-python"
 
+host_interfaces:
+  - "br-ex"
+  - "br-ctlplane"
+  - "virbr0"
+
 rhel_iso_url: "http://6f7450813e3580d17401-3ab35874dcd71892b6160b9e83e26245.r53.cf5.rackcdn.com/rhel-server-7.7-x86_64-dvd.iso"
 rhel_iso_path: "/var/lib/libvirt/images/rhel-server-7.7-x86_64-dvd.iso"
 
