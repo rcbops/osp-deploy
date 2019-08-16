@@ -22,7 +22,7 @@ function prepare_venv {
         fi
         virtualenv $HOME/osp
         source $HOME/osp/bin/activate
-        pip install ansible ara
+        pip install ansible ara libvirt-python
     fi
     source $HOME/osp/bin/activate
 }
