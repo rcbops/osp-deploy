@@ -70,6 +70,7 @@
     owner: stack
     group: stack
   with_items:
+    - logs
     - scripts
 
 # Now we are going to create the undercloud 
