@@ -30,10 +30,10 @@
       encrypt: "sha512_crypt"
       salt_size: 7
   tasks:
-#    - name: Install required packages
-#      yum: 
-#        name: "{{ host_packages }}"
-#      become: yes
+    - name: Install required packages
+      yum: 
+        name: "{{ host_packages }}"
+      become: yes
     
     - name: Install required PIP packages
       pip:
