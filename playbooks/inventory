@@ -1,2 +1,1 @@
-[undercloud]
-10.0.236.100
+localhost connection=local

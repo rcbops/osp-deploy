@@ -71,7 +71,6 @@
     group: stack
   with_items:
     - scripts
-    - utilities
 
 # Now we are going to create the undercloud 
 # configuration. This will be used by the installer
@@ -83,14 +82,6 @@
     owner: stack
     group: stack
 
-# Copy over some utility scripts to ease administration
-- name: Copy over admin utilities
-  synchronize:
-    src: utilities
-    dest: /home/stack
-  tags:
-    - utilities
-    
 # We are going to create a install script
 # so we can enable better logging of the 
 # installation

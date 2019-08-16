@@ -13,10 +13,35 @@
 # limitations under the License.
 
 ---
+
 # # Redhat Registration
 # rh_user: "{{ lookup('env', 'RPC_RH_USER') }}"
 # rh_password: "{{ lookup('env', 'RPC_RH_PASS') }}"
 # redhat_pool_id: "{{ lookup('env', 'RPC_POOL_ID') }}"
+
+host_packages:
+  - "@Virtualization Host"
+  - "@Development tools"
+  - "libvirt-devel"
+
+pip_packages:
+  - "libvirt-python"
+
+rhel_iso_url: "http://6f7450813e3580d17401-3ab35874dcd71892b6160b9e83e26245.r53.cf5.rackcdn.com/rhel-server-7.7-x86_64-dvd.iso"
+rhel_iso_path: "/var/lib/libvirt/images/rhel-server-7.7-x86_64-dvd.iso"
+
+virtual_machines:
+  director:
+    mem: 8192
+    vcpus: 8
+    disk: 100
+    address: 192.168.122.50
+    netmask: 255.255.255.0
+    gateway: 192.168.122.1
+    iso_location: "{{ rhel_iso_path }}"
+    ks_location: "/home/stack/osp-deploy/kickstarts/rhel-ks-director.cfg"
+
+undercloud_hostname: "director.localdomain"
 
 # Enable Open Virutal Networking plugin
 overcloud_ovn_enabled: true

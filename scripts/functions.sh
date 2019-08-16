@@ -22,20 +22,26 @@ function prepare_venv {
         fi
         virtualenv $HOME/osp
         source $HOME/osp/bin/activate
-        pip install ansible==2.7.0 ara
+        pip install ansible ara
     fi
     source $HOME/osp/bin/activate
+}
+
+function prepare_vm_host {
+    prepare_venv
+    pushd $PWD/playbooks
+    ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml
 }
 
 function configure_undercloud {
     # At this point we have ansible installed
     prepare_venv 
     pushd $PWD/playbooks
-    ansible-playbook -i inventory deploy_director.yml
+    ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml
 }
 
 function configure_overcloud {
     prepare_venv 
     pushd $PWD/playbooks
-    ansible-playbook -i inventory deploy_overcloud.yml
+    ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_overcloud.yml
 }

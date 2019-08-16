@@ -41,7 +41,6 @@ undercloud_packages:
 
 
 # Undercloud configuration options
-undercloud_hostname: "director.localdomain"
 undercloud_pxe_vlan: "2064"
 undercloud_provision_mode: "vlan"
 undercloud_name_servers: 
@@ -77,7 +76,7 @@ undercloud_inspection_iprange:
   - "192.168.24.120"
 undercloud_inspection_gateway: "192.168.24.1"
 # if vlan is set on local_interface, set this to eth0.<vlan>
-undercloud_local_interface: "eth0"
+undercloud_local_interface: "eth2"
 undercloud_masquerade: true
 undercloud_discovery_default_driver: "ipmi"
 undercloud_debug: false

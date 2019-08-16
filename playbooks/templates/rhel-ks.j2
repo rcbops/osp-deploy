@@ -1,0 +1,61 @@
+# System authorization information
+reboot
+auth --enableshadow --passalgo=sha512
+repo --name="Server-HighAvailability" --baseurl=file:///run/install/repo/addons/HighAvailability
+repo --name="Server-ResilientStorage" --baseurl=file:///run/install/repo/addons/ResilientStorage
+cdrom
+text
+firstboot --enable
+ignoredisk --only-use=vda
+keyboard --vckeymap=us --xlayouts='us'
+lang en_US.UTF-8
+
+# Network information
+{% if item.value.address is defined %}
+network  --bootproto=static --device=eth0 --onboot=on --ipv6=auto --activate --ip={{ item.value.address }} --netmask={{ item.value.netmask }} --gateway={{ item.value.gateway }} --nameserver={{ ansible_dns.nameservers[0] }}
+{% else %}
+network  --bootproto=dhcp --device=eth0 --onboot=off --ipv6=auto
+{% endif %}
+network  --bootproto=dhcp --device=eth1 --onboot=off --ipv6=auto
+network  --bootproto=dhcp --device=eth2 --onboot=off --ipv6=auto
+network  --hostname={{ undercloud_hostname }}
+
+# Root password
+rootpw --iscrypted {{ encrypted_root_password }}
+# System services
+services --disabled="chronyd"
+# System timezone
+timezone America/Chicago --isUtc --nontp
+user --groups=wheel --name=stack --password={{ encrypted_stack_password }}
+
+sshkey --user=stack "{{lookup('file', '{{ ansible_user_dir }}/.ssh/id_rsa.pub') }}"
+
+# System bootloader configuration
+bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=vda
+autopart --type=lvm
+# Partition clearing information
+clearpart --none --initlabel
+
+%packages
+@^minimal
+@core
+@development
+kexec-tools
+
+%end
+
+%addon com_redhat_kdump --enable --reserve-mb='auto'
+
+%end
+
+%anaconda
+pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
+pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+%end
+
+%post --log=/root/ks-post.log
+echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
+chmod 0440 /etc/sudoers.d/stack
+restorecon /etc
+%end
