@@ -1,0 +1,74 @@
+---
+
+- name: Prepare host for Undercloud
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  environment: "{{ deployment_environment_variables | default({}) }}"
+  tasks:
+    - name: get list of VMS
+      virt:
+        command: "list_vms"
+      register: vms
+
+    - name: Install vbmc
+      pip:
+        name: virtualbmc
+        state: present
+
+    - name: Create AIO environment VMs
+      command: >
+            virt-install --name "{{ item.key }}"
+                         --memory "{{ item.value.mem }}"
+                         --vcpus "{{ item.value.vcpus }}"
+                         --pxe
+                         --disk size="{{ item.value.disk }}"
+                         --network bridge=br-ctlplane,mac="{{ item.value.mac_address }}"
+                         --graphics=vnc
+                         --os-variant=rhel7
+                         --noautoconsole
+                         --wait 1
+                         --noreboot
+      when: item.key not in vms.list_vms
+      with_dict: "{{ virtual_machines_aio }}"
+      become: yes
+      ignore_errors: yes
+
+    - name: Reset VirtualBMC sessions
+      file:
+        path: /root/.vbmc
+        state: absent
+
+    - name: Get running vbmc processes
+      shell: "ps -ef | grep -v grep | grep vbmc | awk '{print $2}'"
+      register: running_processes
+
+    - name: Force kill stuck vbmc processes
+      shell: "kill -9 {{ item }}"
+      with_items: "{{ running_processes.stdout_lines }}"
+      ignore_errors: yes
+
+    - name: Start VirtualBMC daemon
+      shell: vbmcd; vbmc list
+      failed_when: false
+
+    - name: Setup VirtualBMC for each VM for Undercloud to use
+      shell: |
+        vbmc add {{ item.key }} --username root --password secrete --address {{ item.value.gateway }} --port {{ item.value.vbmc_port }}
+        vbmc start {{ item.key }}
+      failed_when: false
+      with_dict: "{{ virtual_machines_aio }}"
+
+    - name: Open tcp firewall ports for VBMC
+      firewalld:
+        port: "{{ item.value.vbmc_port }}/tcp"
+        permanent: yes
+        state: enabled
+      with_dict: "{{ virtual_machines_aio }}"
+
+    - name: Open udp firewall ports for VBMC
+      firewalld:
+        port: "{{ item.value.vbmc_port }}/udp"
+        permanent: yes
+        state: enabled
+      with_dict: "{{ virtual_machines_aio }}"

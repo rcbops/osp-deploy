@@ -1,55 +1,55 @@
 {
     "nodes":[
         {
-            "mac":[
+            "mac": [
                 "52:54:00:bd:80:01"
             ],
             "name":"controller1",
             "cpu":"4",
-            "memory":"16384",
+            "memory":"8192",
             "disk":"90",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
             "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "624",
+            "pm_addr":"192.168.122.1",
+            "pm_port": "6624",
             "capabilities": "profile:control,boot_option:local"
         },
         {
-            "mac":[
+            "mac": [
                 "52:54:00:bd:80:02"
             ],
             "name":"controller2",
             "cpu":"4",
-            "memory":"16384",
+            "memory":"8192",
             "disk":"90",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
             "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "625",
+            "pm_addr":"192.168.122.1",
+            "pm_port": "6625",
             "capabilities": "profile:control,boot_option:local"
         },
         {
-            "mac":[
+            "mac": [
                 "52:54:00:bd:80:03"
             ],
             "name":"controller3",
             "cpu":"4",
-            "memory":"16384",
+            "memory":"8192",
             "disk":"90",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
             "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "626",
+            "pm_addr":"192.168.122.1",
+            "pm_port": "6626",
             "capabilities": "profile:control,boot_option:local"
         },
         {
-            "mac":[
+            "mac": [
                 "52:54:00:bd:80:05"
             ],
             "name":"compute1",
@@ -60,12 +60,12 @@
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
             "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "627",
+            "pm_addr":"192.168.122.1",
+            "pm_port": "6627",
             "capabilities": "profile:compute,boot_option:local"
         },
         {
-            "mac":[
+            "mac": [
                 "52:54:00:bd:80:06"
             ],
             "name":"compute2",
@@ -76,66 +76,9 @@
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
             "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "628",
+            "pm_addr":"192.168.122.1",
+            "pm_port": "6628",
             "capabilities": "profile:compute,boot_option:local"
-        },
-        {
-            "mac":[
-                "52:54:00:bd:80:07"
-            ],
-            "name":"ceph1",
-            "cpu":"2",
-            "memory":"4096",
-            "disk":"90",
-            "root_device": {
-               "by_path":"/dev/disk/by-path/pci-0000:00:09.0"
-                },
-            "arch":"x86_64",
-            "pm_type":"pxe_ipmitool",
-            "pm_user":"root",
-            "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "629",
-            "capabilities": "profile:ceph-storage,boot_option:local"
-        },
-        {
-            "mac":[
-                "52:54:00:bd:80:08"
-            ],
-            "name":"ceph2",
-            "cpu":"2",
-            "memory":"4096",
-            "disk":"90",
-            "root_device": {
-               "by_path":"/dev/disk/by-path/pci-0000:00:09.0"
-                },
-            "arch":"x86_64",
-            "pm_type":"pxe_ipmitool",
-            "pm_user":"root",
-            "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "630",
-            "capabilities": "profile:ceph-storage,boot_option:local"
-        },
-        {
-            "mac":[
-                "52:54:00:bd:80:09"
-            ],
-            "name":"ceph3",
-            "cpu":"2",
-            "memory":"4096",
-            "disk":"90",
-            "root_device": {
-               "by_path":"/dev/disk/by-path/pci-0000:00:09.0"
-                },
-            "arch":"x86_64",
-            "pm_type":"pxe_ipmitool",
-            "pm_user":"root",
-            "pm_password":"secrete",
-            "pm_addr":"192.168.24.254",
-            "pm_port": "631",
-            "capabilities": "profile:ceph-storage,boot_option:local"
         }
     ]
 }

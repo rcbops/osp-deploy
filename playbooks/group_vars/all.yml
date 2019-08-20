@@ -20,8 +20,8 @@
 # redhat_pool_id: "{{ lookup('env', 'RPC_POOL_ID') }}"
 
 host_packages:
-  - "@Virtualization Host"
-  - "@Development tools"
+  - "@^Virtualization Host"
+  - "@^Development tools"
   - "libvirt-devel"
 
 pip_packages:
@@ -46,13 +46,60 @@ virtual_machines:
     iso_location: "{{ rhel_iso_path }}"
     ks_location: "/home/stack/osp-deploy/kickstarts/rhel-ks-director.cfg"
 
+virtual_machines_aio:
+  controller1:
+    mem: 8192
+    vcpus: 8
+    disk: 100
+    mac_address: 52:54:00:bd:80:01
+    address: 192.168.122.51
+    netmask: 255.255.255.0
+    gateway: 192.168.122.1
+    vbmc_port: 6624
+  controller2:
+    mem: 8192
+    vcpus: 8
+    disk: 100
+    mac_address: 52:54:00:bd:80:02
+    address: 192.168.122.52
+    netmask: 255.255.255.0
+    gateway: 192.168.122.1
+    vbmc_port: 6625
+  controller3:
+    mem: 8192
+    vcpus: 8
+    disk: 100
+    mac_address: 52:54:00:bd:80:03
+    address: 192.168.122.53
+    netmask: 255.255.255.0
+    gateway: 192.168.122.1
+    vbmc_port: 6626
+  compute1:
+    mem: 8192
+    vcpus: 8
+    disk: 100
+    mac_address: 52:54:00:bd:80:05
+    address: 192.168.122.54
+    netmask: 255.255.255.0
+    gateway: 192.168.122.1
+    vbmc_port: 6627
+  compute2:
+    mem: 8192
+    vcpus: 8
+    disk: 100
+    mac_address: 52:54:00:bd:80:06
+    address: 192.168.122.55
+    netmask: 255.255.255.0
+    gateway: 192.168.122.1
+    vbmc_port: 6628
+
 undercloud_hostname: "director.localdomain"
 
 # Enable Open Virutal Networking plugin
 overcloud_ovn_enabled: true
 
 # Enable CEPH, and RadosGW
-overcloud_ceph_enabled: true
+overcloud_ceph_enabled: false
 
 # Enable Octavia Load Balancing 
 overcloud_octavia_enabled: true
