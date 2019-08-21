@@ -20,8 +20,8 @@
 # redhat_pool_id: "{{ lookup('env', 'RPC_POOL_ID') }}"
 
 host_packages:
-  - "@^Virtualization Host"
-  - "@^Development tools"
+  - "@Virtualization Host"
+  - "@Development tools"
   - "libvirt-devel"
   - "libvirt"
   - "virt-install"
