@@ -11,8 +11,7 @@ Start with a base install of RHEL or CentOS and configure it to be a Virtualizat
 If the kickstart to provision the host wasn't set up with virtualization support, install these packages and reboot:
 
 ```
-yum -y install libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall
-bridge-utils rsync virt-viewer
+yum -y install libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
 ```
 
 #### Check out osp-deploy 
