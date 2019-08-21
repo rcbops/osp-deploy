@@ -62,6 +62,7 @@
     - name: Open tcp firewall ports for VBMC
       firewalld:
         port: "{{ item.value.vbmc_port }}/tcp"
+        immediate: yes
         permanent: yes
         state: enabled
       with_dict: "{{ virtual_machines_aio }}"
@@ -69,6 +70,7 @@
     - name: Open udp firewall ports for VBMC
       firewalld:
         port: "{{ item.value.vbmc_port }}/udp"
+        immediate: yes
         permanent: yes
         state: enabled
       with_dict: "{{ virtual_machines_aio }}"
