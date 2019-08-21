@@ -37,6 +37,7 @@ function configure_undercloud {
     # At this point we have ansible installed
     prepare_venv 
     pushd $PWD/playbooks
+    export ANSIBLE_HOST_KEY_CHECKING=False
     ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml
 }
 
