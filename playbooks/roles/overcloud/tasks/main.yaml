@@ -68,7 +68,8 @@
       tags:
         - nodes
         - introspection
-    - shell: |
+    - name: Introspect nodes from imported instackenv.json
+      shell: |
         source /home/stack/stackrc
         openstack overcloud node introspect --all-manageable --provide
       when:
@@ -88,7 +89,6 @@
   #     - "{{ (baremetal_nodes.stdout | from_json) }}" 
   when:
      instackenv.stat.exists == True
-
 
 - name: Update DNS setting for ctlplane-subnet
   shell: |

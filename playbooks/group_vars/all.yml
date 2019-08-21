@@ -26,6 +26,7 @@ host_packages:
   - "libvirt"
   - "virt-install"
   - "libvirt-python"
+  - "tmux"
   
 pip_packages:
   - "libvirt-python"

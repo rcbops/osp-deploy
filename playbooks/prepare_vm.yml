@@ -30,6 +30,34 @@
       encrypt: "sha512_crypt"
       salt_size: 7
   tasks:
+    - name: Verify virtulization support
+      assert:
+        that:
+        - ansible_virtualization_type == "kvm"
+        msg:
+          "Host does not support virtualization, please enable in the bios and ensure that the proper kvm modules are loaded"
+      tags:
+        - "checks"
+
+    - name: Verify that interfaces exist
+      assert:
+        that:
+        - item in ansible_interfaces
+        msg:
+          "Host does not have the needed interfaces configuired, please configure the {{ item }} bridge"
+      with_items:
+        - "{{ host_interfaces }}"
+      tags:
+        - "checks"
+
+    - name: Set IP forwarding on hypervisor
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+        sysctl_set: yes
+        state: present
+        reload: yes
+
     - name: Install required packages
       yum: 
         name: "{{ host_packages }}"
@@ -40,26 +68,6 @@
         name: "{{ pip_packages }}"
         virtualenv: "{{ ansible_user_dir }}/osp"
       
-    - name: Verify virtulization support
-      assert: 
-        that:
-        - ansible_virtualization_type == "kvm"
-        msg:
-          "Host does not support virtualization, please enable in the bios and ensure that the proper kvm modules are loaded"
-      tags: 
-        - "checks"
-
-    - name: Verify that interfaces exist
-      assert:
-        that: 
-        - item in ansible_interfaces 
-        msg:
-          "Host does not have the needed interfaces configuired, please configure the {{ item }} bridge"
-      with_items:
-        - "{{ host_interfaces }}"
-      tags:
-        - "checks"
-
     - name: Add libvirt group to stack user
       user: 
         name: stack

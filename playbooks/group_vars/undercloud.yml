@@ -20,8 +20,9 @@ enabled_repositories:
   - "rhel-7-server-extras-rpms"
   - "rhel-7-server-rh-common-rpms"
   - "rhel-ha-for-rhel-7-server-rpms"
-  - "rhel-7-server-rhceph-3-tools-rpms" 
   - "rhel-7-server-openstack-13-rpms"
+  - "rhel-7-server-openstack-13-optools-rpms"
+  - "rhel-7-server-rhceph-3-tools-rpms" 
 
 undercloud_packages:
   - "python-tripleoclient"
