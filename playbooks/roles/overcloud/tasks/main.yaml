@@ -47,7 +47,7 @@
 
 - name: Import and configure based on instackenv.json
   block:
-    - copy: 
+    - copy:
         src: files/instackenv.json
         dest: /home/stack/instackenv.json
         owner: "stack"
@@ -55,19 +55,22 @@
         remote_src: no
       tags:
         - nodes
+
     - shell: |
-        source /home/stack/stackrc 
+        source /home/stack/stackrc
         openstack overcloud node import /home/stack/instackenv.json
       tags:
         - nodes
         - import_nodes
+
     - shell: |
         source /home/stack/stackrc
-        openstack baremetal node list -f json 
+        openstack baremetal node list -f json
       register: baremetal_nodes
       tags:
         - nodes
         - introspection
+
     - name: Introspect nodes from imported instackenv.json
       shell: |
         source /home/stack/stackrc
@@ -75,18 +78,25 @@
       when:
         - ( baremetal_nodes.stdout_lines | length ) == 0
       register: introspection_complete
-  # - name: Introspect nodes
-  #   shell: |
-  #     source /home/stack/stackrc
-  #     openstack overcloud node introspect {{ item.UUID }} --provide
-  #   tags:
-  #     - nodes
-  #     - introspection 
-  #   when: 
-  #     - item['Provisioning State'] == 'manageable'
-  #     - introspection_complete.skipped == True
-  #   with_dict:
-  #     - "{{ (baremetal_nodes.stdout | from_json) }}" 
+
+    - name: Generate list of nodes to introspect
+      set_fact: nodes_to_introspect="{{ nodes_to_introspect|default([]) + [ item.UUID ] }}"
+      when:
+        - item['Provisioning State'] == 'manageable'
+        - introspection_complete.skipped == True
+      with_items:
+        - "{{ baremetal_nodes.stdout | from_json }}"
+
+    - name: Introspect nodes
+      shell: |
+        source /home/stack/stackrc
+        openstack overcloud node introspect {{ nodes_to_introspect | join(" ") }} --provide
+      tags:
+        - nodes
+        - introspection
+      when:
+        - nodes_to_introspect is defined
+        - nodes_to_introspect > 0
   when:
      instackenv.stat.exists == True
 
