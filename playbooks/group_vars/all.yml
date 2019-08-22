@@ -41,7 +41,7 @@ rhel_iso_path: "/var/lib/libvirt/images/rhel-server-7.7-x86_64-dvd.iso"
 
 virtual_machines:
   director:
-    mem: 8192
+    mem: 16384
     vcpus: 8
     disk: 100
     address: 192.168.122.50
