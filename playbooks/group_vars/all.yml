@@ -51,7 +51,7 @@ virtual_machines:
     ks_location: "/home/stack/osp-deploy/kickstarts/rhel-ks-director.cfg"
 
 virtual_machines_aio:
-  controller1:
+  overcloud-controller-0:
     mem: 8192
     vcpus: 8
     disk: 100
@@ -60,7 +60,7 @@ virtual_machines_aio:
     netmask: 255.255.255.0
     gateway: 192.168.122.1
     vbmc_port: 6624
-  controller2:
+  overcloud-controller-1:
     mem: 8192
     vcpus: 8
     disk: 100
@@ -69,7 +69,7 @@ virtual_machines_aio:
     netmask: 255.255.255.0
     gateway: 192.168.122.1
     vbmc_port: 6625
-  controller3:
+  overcloud-controller-2:
     mem: 8192
     vcpus: 8
     disk: 100
@@ -78,7 +78,7 @@ virtual_machines_aio:
     netmask: 255.255.255.0
     gateway: 192.168.122.1
     vbmc_port: 6626
-  compute1:
+  overcloud-compute-0:
     mem: 8192
     vcpus: 8
     disk: 100
@@ -87,7 +87,7 @@ virtual_machines_aio:
     netmask: 255.255.255.0
     gateway: 192.168.122.1
     vbmc_port: 6627
-  compute2:
+  overcloud-compute-1:
     mem: 8192
     vcpus: 8
     disk: 100
