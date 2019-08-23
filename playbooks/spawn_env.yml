@@ -27,7 +27,7 @@
                          --graphics=vnc
                          --os-variant=rhel7
                          --noautoconsole
-                         --wait 1
+                         --wait 0
                          --noreboot
       when: item.key not in vms.list_vms
       with_dict: "{{ virtual_machines_aio }}"

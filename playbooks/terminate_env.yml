@@ -1,0 +1,42 @@
+---
+- name: Spin down AIO environment
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  environment: "{{ deployment_environment_variables | default({}) }}"
+  tasks:
+    - name: Spin down AIO VMs
+      virt:
+        name: "{{ item.key }}"
+        command: destroy
+      with_dict:
+      - "{{ virtual_machines_aio }}"
+      ignore_errors: yes
+
+    - name: Undefine the VMs
+      virt:
+        name: "{{ item.key }}"
+        command: undefine
+      failed_when: false
+      with_dict: "{{ virtual_machines_aio }}"
+
+    - name: Remove Host Keys
+      command: "ssh-keygen -R {{ item.key }}"
+      become: yes
+      become_user: stack
+      with_dict:
+      - "{{ virtual_machines_aio }}"
+      ignore_errors: yes
+
+    - name: Delete VM Disk Image
+      file:
+        path: "/var/lib/libvirt/images/{{ item.key }}.qcow2"
+        state: absent
+      with_dict: "{{ virtual_machines_aio }}"
+
+    - name: Undefine the VM
+      virt:
+        name: "{{ item.key }}"
+        command: undefine
+      failed_when: false
+      with_dict: "{{ virtual_machines_aio }}"
