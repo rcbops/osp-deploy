@@ -4,10 +4,10 @@
             "mac": [
                 "52:54:00:bd:80:01"
             ],
-            "name":"controller1",
-            "cpu":"4",
-            "memory":"8192",
-            "disk":"90",
+            "name":"overcloud-controller-0",
+            "cpu":"8",
+            "memory":"16384",
+            "disk":"100",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
@@ -20,10 +20,10 @@
             "mac": [
                 "52:54:00:bd:80:02"
             ],
-            "name":"controller2",
-            "cpu":"4",
-            "memory":"8192",
-            "disk":"90",
+            "name":"overcloud-controller-1",
+            "cpu":"8",
+            "memory":"16384",
+            "disk":"100",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
@@ -36,10 +36,10 @@
             "mac": [
                 "52:54:00:bd:80:03"
             ],
-            "name":"controller3",
-            "cpu":"4",
-            "memory":"8192",
-            "disk":"90",
+            "name":"overcloud-controller-2",
+            "cpu":"8",
+            "memory":"16384",
+            "disk":"100",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
@@ -52,10 +52,10 @@
             "mac": [
                 "52:54:00:bd:80:05"
             ],
-            "name":"compute1",
-            "cpu":"4",
+            "name":"overcloud-compute-0",
+            "cpu":"8",
             "memory":"8192",
-            "disk":"90",
+            "disk":"100",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",
@@ -68,10 +68,10 @@
             "mac": [
                 "52:54:00:bd:80:06"
             ],
-            "name":"compute2",
-            "cpu":"4",
+            "name":"overcloud-compute-1",
+            "cpu":"8",
             "memory":"8192",
-            "disk":"90",
+            "disk":"100",
             "arch":"x86_64",
             "pm_type":"pxe_ipmitool",
             "pm_user":"root",

@@ -52,7 +52,7 @@ virtual_machines:
 
 virtual_machines_aio:
   overcloud-controller-0:
-    mem: 8192
+    mem: 16384
     vcpus: 8
     disk: 100
     mac_address: 52:54:00:bd:80:01
@@ -61,7 +61,7 @@ virtual_machines_aio:
     gateway: 192.168.122.1
     vbmc_port: 6624
   overcloud-controller-1:
-    mem: 8192
+    mem: 16384
     vcpus: 8
     disk: 100
     mac_address: 52:54:00:bd:80:02
@@ -70,7 +70,7 @@ virtual_machines_aio:
     gateway: 192.168.122.1
     vbmc_port: 6625
   overcloud-controller-2:
-    mem: 8192
+    mem: 16384
     vcpus: 8
     disk: 100
     mac_address: 52:54:00:bd:80:03
