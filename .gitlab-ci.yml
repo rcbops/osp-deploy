@@ -2,6 +2,7 @@ stages:
   - test
 variables:
   SKIP_PROMPTS: "true"
+  GIT_STRATEGY: clone
 
 .deploy_script:
   before_script:
