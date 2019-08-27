@@ -30,6 +30,22 @@
       encrypt: "sha512_crypt"
       salt_size: 7
   tasks:
+    - name: Install required packages
+      yum:
+        name: "{{ host_packages }}"
+      become: yes
+
+    - name: Install required PIP packages
+      pip:
+        name: "{{ pip_packages }}"
+        virtualenv: "{{ ansible_user_dir }}/osp"
+
+    - name: Ensure libvirtd is started
+      service:
+        name: libvirtd
+        state: started
+        enabled: yes
+
     - name: Verify virtulization support
       assert:
         that:
@@ -58,16 +74,6 @@
         state: present
         reload: yes
 
-    - name: Install required packages
-      yum: 
-        name: "{{ host_packages }}"
-      become: yes
-    
-    - name: Install required PIP packages
-      pip:
-        name: "{{ pip_packages }}"
-        virtualenv: "{{ ansible_user_dir }}/osp"
-      
     - name: Add libvirt group to stack user
       user: 
         name: stack
