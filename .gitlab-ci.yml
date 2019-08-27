@@ -1,0 +1,38 @@
+stages:
+  - test
+
+.deploy_script:
+  before_script:
+    - yum install -y libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
+    - brctl addbr br-ex
+    - brctl addbr br-ctlplane
+  script:
+    - ./prepare_vm.sh
+    - ./deploy_director.sh
+    - cd playbooks
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
+    - cd ..
+    - ./deploy_overcloud.sh
+    - ssh stack@director "scripts/deploy_overcloud.sh | tee /home/stack/logs/deploy_overcloud.sh"
+  after_script:
+    - cd playbooks
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py terminate_env.yml
+    - cd ..
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py remove_director_vm.yml
+
+test_pr:
+  stage: test
+  tags:
+    - osp
+  variables:
+  extends: .deploy_script
+  only:
+    refs:
+      - merge_requests
+  script: *build_script
+  except:
+    - schedules
+  artifacts:
+    paths:
+      - artifacts/
+    expire_in: 1 week
