@@ -9,6 +9,8 @@ variables:
     - yum install -y libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
   script:
     - ./prepare_vm.sh
+    - ssh-keygen -R 192.168.122.50
+    - ssh-keyscan 192.168.122.50 >> ~/.ssh/known_hosts
     - ./deploy_director.sh
     - cd playbooks
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
