@@ -1,0 +1,6 @@
+---
+encrypted_root_password: "{{ lookup('env','ENCRYPTED_ROOT_PASSWORD') | default('secrete', true) }}"
+encrypted_stack_password: "{{ lookup('env','ENCRYPTED_STACK_PASSWORD') | default('secrete', true) }}"
+rh_user: "{{ lookup('env','RH_USER') }}"
+rh_password: "{{ lookup('env','RH_PASSWORD') }}"
+redhat_pool_id: "{{ lookup('env','REDHAT_POOL_ID') }}"

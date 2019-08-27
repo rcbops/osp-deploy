@@ -30,7 +30,11 @@ function prepare_venv {
 function prepare_vm_host {
     prepare_venv
     pushd $PWD/playbooks
-    ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml
+    if [ -v SKIP_PROMPTS ]; then
+      ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml -e '@extra_vars.yml'
+    else
+      ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml
+    fi
 }
 
 function configure_undercloud {
@@ -38,7 +42,11 @@ function configure_undercloud {
     prepare_venv 
     pushd $PWD/playbooks
     export ANSIBLE_HOST_KEY_CHECKING=False
-    ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml
+    if [ -v SKIP_PROMPTS ]; then
+      ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml -e '@extra_vars.yml'
+    else
+      ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml
+    fi
 }
 
 function configure_overcloud {

@@ -1,5 +1,7 @@
 stages:
   - test
+variables:
+  SKIP_PROMPTS: "true"
 
 .deploy_script:
   before_script:
