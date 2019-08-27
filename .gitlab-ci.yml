@@ -29,7 +29,6 @@ test_pr:
   only:
     refs:
       - merge_requests
-  script: *build_script
   except:
     - schedules
   artifacts:
