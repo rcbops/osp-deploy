@@ -4,8 +4,6 @@ stages:
 .deploy_script:
   before_script:
     - yum install -y libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
-    - brctl addbr br-ex
-    - brctl addbr br-ctlplane
   script:
     - ./prepare_vm.sh
     - ./deploy_director.sh
