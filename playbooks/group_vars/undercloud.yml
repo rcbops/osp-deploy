@@ -57,7 +57,6 @@ undercloud_generate_service_certificate: false
 # Undercloud certificate options
 # If you have a customer supplied certificate, you only need to specify the undercloud pem, and the director certificate location
 # where it is installed on the host
-undercloud_generate_service_certificate: false
 undercloud_certificates_directory: "/home/stack/certificates"
 undercloud_service_certificate: "/etc/pki/instack-certs/undercloud.pem"
 undercloud_certificate_location: "{{ undercloud_certificates_directory }}/undercloud.crt"
