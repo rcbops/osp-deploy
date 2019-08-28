@@ -20,7 +20,6 @@ variables:
   after_script:
     - cd playbooks
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py terminate_env.yml
-    - cd ..
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py remove_director_vm.yml
 
 test_pr:
