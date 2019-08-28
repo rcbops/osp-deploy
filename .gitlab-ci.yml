@@ -16,7 +16,7 @@ variables:
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
     - cd ..
     - ./deploy_overcloud.sh
-    - ssh stack@director "scripts/deploy_overcloud.sh | tee /home/stack/logs/deploy_overcloud.sh"
+    - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh | tee /home/stack/logs/deploy_overcloud.sh"
   after_script:
     - cd playbooks
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py terminate_env.yml
