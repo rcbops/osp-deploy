@@ -15,14 +15,15 @@
 
 ---
 
-#- name: Unregister director vm
-#  hosts: undercloud
-#  gather_facts: no
-#  become: yes
-#  tasks:
-#    - name: Unregister director
-#      redhat_subscription: 
-#        state: absent
+- name: Unregister director vm
+  hosts: undercloud
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Unregister director
+      redhat_subscription: 
+        state: absent
+      ignore_errors: true
 
 - name: Remove the director vm 
   hosts: localhost
