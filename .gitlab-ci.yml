@@ -1,12 +1,15 @@
 stages:
-  - test
+  - prepare
+  - undercloud
+  - overcloud
+
 variables:
   SKIP_PROMPTS: "true"
   GIT_STRATEGY: clone
   ENABLE_TEARDOWN: "true"
 
 Prepare VM:
-  stage: test
+  stage: prepare
   tags:
     - osp
   before_script:
@@ -23,7 +26,7 @@ Prepare VM:
     - schedules
 
 Deploy Undercloud:
-  stage: test
+  stage: undercloud
   tags:
     - osp
   script:
@@ -38,7 +41,7 @@ Deploy Undercloud:
     - schedules
 
 Deploy Overcloud:
-  stage: test
+  stage: overcloud
   tags:
     - osp
   script:
