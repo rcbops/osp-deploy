@@ -5,7 +5,10 @@ variables:
   GIT_STRATEGY: clone
   ENABLE_TEARDOWN: "true"
 
-.deploy_script:
+Prepare VM:
+  stage: test
+  tags:
+    - osp
   before_script:
     - ./teardown.sh
     - yum install -y libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
@@ -13,27 +16,37 @@ variables:
     - ./prepare_vm.sh
     - ssh-keygen -R 192.168.122.50
     - ssh-keyscan 192.168.122.50 >> ~/.ssh/known_hosts
-    - ./deploy_director.sh
-    - cd playbooks
-    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
-    - cd ..
-    - ./deploy_overcloud.sh
-    - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
-  after_script:
-    - ./teardown.sh
-
-test_pr:
-  stage: test
-  tags:
-    - osp
-  variables:
-  extends: .deploy_script
   only:
     refs:
       - merge_requests
   except:
     - schedules
-  artifacts:
-    paths:
-      - artifacts/
-    expire_in: 1 week
+
+Deploy Undercloud:
+  stage: test
+  tags:
+    - osp
+  script:
+    - ./deploy_director.sh
+    - cd playbooks
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
+    - cd ..
+  only:
+    refs:
+      - merge_requests
+  except:
+    - schedules
+
+Deploy Overcloud:
+  stage: test
+  tags:
+    - osp
+  script:
+    - ./deploy_overcloud.sh
+    - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
+  only:
+    refs:
+      - merge_requests
+  except:
+    - schedules
+
