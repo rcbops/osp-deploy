@@ -1,6 +1,7 @@
 stages:
   - prepare
   - undercloud
+  - introspect
   - overcloud
 
 variables:
@@ -40,12 +41,26 @@ Deploy Undercloud:
   except:
     - schedules
 
+Introspect:
+  stage: introspect
+  tags:
+    - osp
+  script:
+    - cd playbooks
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
+    - cd ..
+    - ./deploy_overcloud.sh
+  only:
+    refs:
+      - merge_requests
+  except:
+    - schedules
+
 Deploy Overcloud:
   stage: overcloud
   tags:
     - osp
   script:
-    - ./deploy_overcloud.sh
     - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
   only:
     refs:
