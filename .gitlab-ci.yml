@@ -1,35 +1,70 @@
 stages:
-  - test
+  - prepare
+  - undercloud
+  - introspect
+  - overcloud
 
-.deploy_script:
+variables:
+  SKIP_PROMPTS: "true"
+  GIT_STRATEGY: clone
+  ENABLE_TEARDOWN: "true"
+
+Prepare VM:
+  stage: prepare
+  tags:
+    - osp
   before_script:
+    - ./teardown.sh
     - yum install -y libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
   script:
     - ./prepare_vm.sh
-    - ./deploy_director.sh
-    - cd playbooks
-    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
-    - cd ..
-    - ./deploy_overcloud.sh
-    - ssh stack@director "scripts/deploy_overcloud.sh | tee /home/stack/logs/deploy_overcloud.sh"
-  after_script:
-    - cd playbooks
-    - ansible-playbook -i inventory -i plugins/libvirt_inv.py terminate_env.yml
-    - cd ..
-    - ansible-playbook -i inventory -i plugins/libvirt_inv.py remove_director_vm.yml
-
-test_pr:
-  stage: test
-  tags:
-    - osp
-  variables:
-  extends: .deploy_script
+    - ssh-keygen -R 192.168.122.50
+    - ssh-keyscan 192.168.122.50 >> ~/.ssh/known_hosts
   only:
     refs:
       - merge_requests
   except:
     - schedules
-  artifacts:
-    paths:
-      - artifacts/
-    expire_in: 1 week
+
+Deploy Undercloud:
+  stage: undercloud
+  tags:
+    - osp
+  script:
+    - ./deploy_director.sh
+    - cd playbooks
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
+    - cd ..
+  only:
+    refs:
+      - merge_requests
+  except:
+    - schedules
+
+Introspect:
+  stage: introspect
+  tags:
+    - osp
+  script:
+    - cd playbooks
+    - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
+    - cd ..
+    - ./deploy_overcloud.sh
+  only:
+    refs:
+      - merge_requests
+  except:
+    - schedules
+
+Deploy Overcloud:
+  stage: overcloud
+  tags:
+    - osp
+  script:
+    - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
+  only:
+    refs:
+      - merge_requests
+  except:
+    - schedules
+

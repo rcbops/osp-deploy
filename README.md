@@ -1,4 +1,4 @@
-# osp-deploy
+# osp-deploy - test
 
 Automates the Red Hat OpenStack Platform 13 process
 
@@ -27,8 +27,11 @@ cd /opt/osp-deploy
 * br-ex 
 * br-ipmi
 
-#### Spawn the Director VM
-It will add necessary packages, download the latest RHEL 7.7 ISO and setup a director VM:
+#### Virtualized Director
+
+If you are virtualizing the director, the following command will add the necessary packages,
+download the latest RHEL 7.7 ISO and setup a director VM.  If you are deploying director to
+a baremetal RHEL OS, you can skip this step and start with the next step.
 
 ```
 ./prepare_vm.sh
@@ -62,6 +65,11 @@ ssh stack@director
 cd scripts
 ./deploy_overcloud.sh
 ```
+
+## Contributing and Merge Request Validation
+
+Merge requests are tested with a sample deployment that simulates provisioning of the Director VM, undercloud deployment,
+and overcloud deployment.  This ensures future changes don't break the existing deployment.
 
 # TODO
 
