@@ -1,8 +1,9 @@
 stages:
   - test
 variables:
-  SKIP_PROMPTS: "true"
+  SKIP_PROMPTS: true
   GIT_STRATEGY: clone
+  ENABLE_TEARDOWN: true
 
 .deploy_script:
   before_script:

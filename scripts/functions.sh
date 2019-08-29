@@ -62,4 +62,3 @@ function teardown {
    ansible-playbook -i inventory -i plugins/libvirt_inv.py remove_director_vm.yml
    rm -rf /var/lib/libvirt/images/*.qcow2
 }
-
