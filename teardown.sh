@@ -18,7 +18,7 @@ set -e
 # Import functions and variables
 source $PWD/scripts/functions.sh
 
-if [ -v ENABLE_TEARDOWN ] then;
+if [ -v ENABLE_TEARDOWN ]; then
   teardown
 else
   echo "ENABLE_TEARDOWN environment variable is not active.  This is a data"
