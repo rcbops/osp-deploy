@@ -54,3 +54,12 @@ function configure_overcloud {
     pushd $PWD/playbooks
     ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_overcloud.yml
 }
+
+function teardown {
+   prepare_venv
+   pushd $PWD/playbooks
+   ansible-playbook -i inventory -i plugins/libvirt_inv.py terminate_env.yml
+   ansible-playbook -i inventory -i plugins/libvirt_inv.py remove_director_vm.yml
+   rm -rf /var/lib/libvirt/images/*.qcow2
+}
+

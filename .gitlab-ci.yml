@@ -6,6 +6,7 @@ variables:
 
 .deploy_script:
   before_script:
+    - ./teardown.sh
     - yum install -y libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
   script:
     - ./prepare_vm.sh
@@ -18,9 +19,7 @@ variables:
     - ./deploy_overcloud.sh
     - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
   after_script:
-    - cd playbooks
-    - ansible-playbook -i inventory -i plugins/libvirt_inv.py terminate_env.yml
-    - ansible-playbook -i inventory -i plugins/libvirt_inv.py remove_director_vm.yml
+    - ./teardown.sh
 
 test_pr:
   stage: test
