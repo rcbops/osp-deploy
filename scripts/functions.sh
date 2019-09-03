@@ -31,7 +31,7 @@ function prepare_vm_host {
     prepare_venv
     pushd $PWD/playbooks
     if [ -v SKIP_PROMPTS ]; then
-      ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml -e '@extra_vars.yml'
+      ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml -e '@gating_vars.yml'
     else
       ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_vm.yml
     fi
@@ -43,7 +43,7 @@ function configure_undercloud {
     pushd $PWD/playbooks
     export ANSIBLE_HOST_KEY_CHECKING=False
     if [ -v SKIP_PROMPTS ]; then
-      ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml -e '@extra_vars.yml'
+      ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml -e '@gating_vars.yml'
     else
       ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_director.yml
     fi
