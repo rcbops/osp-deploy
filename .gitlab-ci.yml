@@ -20,6 +20,10 @@ Prepare VM:
     - ./prepare_vm.sh
     - ssh-keygen -R 192.168.122.50
     - ssh-keyscan 192.168.122.50 >> ~/.ssh/known_hosts
+  only:
+    refs:
+      - merge_requests
+      - schedules
 
 Deploy Undercloud:
   stage: undercloud
@@ -30,6 +34,10 @@ Deploy Undercloud:
     - cd playbooks
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
     - cd ..
+  only:
+    refs:
+      - merge_requests
+      - schedules
 
 Introspect:
   stage: introspect
@@ -40,6 +48,10 @@ Introspect:
     - ansible-playbook -i inventory -i plugins/libvirt_inv.py spawn_env.yml
     - cd ..
     - ./deploy_overcloud.sh
+  only:
+    refs:
+      - merge_requests
+      - schedules
 
 Deploy Overcloud:
   stage: overcloud
@@ -47,3 +59,7 @@ Deploy Overcloud:
     - osp
   script:
     - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
+  only:
+    refs:
+      - merge_requests
+      - schedules
