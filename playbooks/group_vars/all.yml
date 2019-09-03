@@ -27,6 +27,18 @@ host_packages:
   - "virt-install"
   - "libvirt-python"
   - "tmux"
+  - "libvirt-client"
+  - "libvirt-daemon"
+  - "qemu-kvm"
+  - "libvirt-daemon-driver-qemu"
+  - "libvirt-daemon-kvm"
+  - "virtinstall"
+  - "bridge-utils"
+  - "rsync"
+  - "virt-viewer"
+  - "libvirt"
+  - "git"
+  - "htop"
   
 pip_packages:
   - "libvirt-python"
