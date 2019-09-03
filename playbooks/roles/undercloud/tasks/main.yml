@@ -14,6 +14,16 @@
 
 ---
 
+# Ensure needed Red Hat variables are defined and not
+# empty strings
+- name: Checking that required Red Hat variables are defined
+  assert:
+    that:
+      - rh_user != ""
+      - rh_password != ""
+      - redhat_pool_id != ""
+    msg: Ensure all REDHAT variables have been set.
+
 # We need to register the vm with redhat so we can pull
 # the packages needed 
 # The credentials are saved in the undercloud group_vars
