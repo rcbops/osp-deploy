@@ -43,7 +43,7 @@
     - name: Ensure libvirtd is started
       service:
         name: libvirtd
-        state: started
+        state: restarted
         enabled: yes
 
     - name: Verify virtulization support
