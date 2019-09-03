@@ -11,7 +11,7 @@ Start with a base install of RHEL or CentOS and configure it to be a Virtualizat
 If the kickstart to provision the host wasn't set up with virtualization support, install these packages and reboot:
 
 ```
-yum -y install libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt
+yum -y install libvirt-client libvirt-daemon qemu-kvm libvirt-daemon-driver-qemu libvirt-daemon-kvm virtinstall bridge-utils rsync virt-viewer libvirt git
 ```
 
 #### Check out osp-deploy 
@@ -21,7 +21,9 @@ git clone https://gitlab.com/antonym/osp-deploy.git /opt/osp-deploy
 cd /opt/osp-deploy
 ```
 
-#### We will need to make sure to have bridges present in NIC configs or can be simulated for testing (ex. brcrl addbr bridge_name for simulation):
+#### Setup Host Networking
+
+We will need to make sure to have bridges available and up in the NIC configs.  They can also be simulated for testing (ex. brcrl addbr bridge_name):
 
 * br-ctlplane
 * br-ex 
