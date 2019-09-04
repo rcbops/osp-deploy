@@ -58,6 +58,9 @@
   package:
     name: "{{ undercloud_packages }}"
     state: latest
+  register: package_install
+  retries: 5
+  until: package_install is success
   tags:
     - "packages"
 
@@ -75,6 +78,9 @@
   package: 
     name: "*"
     state: latest
+  register: update_packages
+  retries: 5
+  until: update_packages is success
   notify:
    - "Reboot Host"
 
