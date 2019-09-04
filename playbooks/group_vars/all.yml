@@ -32,7 +32,7 @@ host_packages:
   - "qemu-kvm"
   - "libvirt-daemon-driver-qemu"
   - "libvirt-daemon-kvm"
-  - "virtinstall"
+  - "virt-install"
   - "bridge-utils"
   - "rsync"
   - "virt-viewer"
