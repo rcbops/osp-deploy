@@ -19,6 +19,7 @@
         command: undefine
       failed_when: false
       with_dict: "{{ virtual_machines_aio }}"
+      ignore_errors: yes
 
     - name: Remove Host Keys
       command: "ssh-keygen -R {{ item.key }}"
@@ -33,10 +34,4 @@
         path: "/var/lib/libvirt/images/{{ item.key }}.qcow2"
         state: absent
       with_dict: "{{ virtual_machines_aio }}"
-
-    - name: Undefine the VM
-      virt:
-        name: "{{ item.key }}"
-        command: undefine
-      failed_when: false
-      with_dict: "{{ virtual_machines_aio }}"
+      ignore_errors: yes
