@@ -27,7 +27,6 @@ We will need to make sure to have bridges available and up in the NIC configs.  
 
 * br-ctlplane
 * br-ex 
-* br-ipmi
 
 #### Virtualized Director
 
