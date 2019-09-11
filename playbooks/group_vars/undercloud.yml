@@ -14,36 +14,7 @@
 
 ---
 
-# Enabled Repos
-enabled_repositories:
-  - "rhel-7-server-rpms"
-  - "rhel-7-server-extras-rpms"
-  - "rhel-7-server-rh-common-rpms"
-  - "rhel-ha-for-rhel-7-server-rpms"
-  - "rhel-7-server-openstack-13-rpms"
-  - "rhel-7-server-openstack-13-optools-rpms"
-  - "rhel-7-server-rhceph-3-tools-rpms" 
-
-undercloud_packages:
-  - "python-tripleoclient"
-  - "ceph-ansible"
-  - "rhosp-director-images"
-  - "rhosp-director-images-ipa"
-  - "ntp"
-  - "tcpdump"
-  - "policycoreutils-python"
-  - "sysstat"
-  - "rsync"
-  - "tuned"
-  - "tmux"
-  - "wget"
-  - "net-tools"
-  - "libguestfs-tools"
-
-
 # Undercloud configuration options
-undercloud_pxe_vlan: "2064"
-undercloud_provision_mode: "vlan"
 undercloud_name_servers: 
   - "1.1.1.1"
   - "1.0.0.1"
@@ -76,6 +47,7 @@ undercloud_inspection_iprange:
   - "192.168.24.100"
   - "192.168.24.120"
 undercloud_inspection_gateway: "192.168.24.1"
+
 # if vlan is set on local_interface, set this to eth0.<vlan>
 undercloud_local_interface: "eth2"
 undercloud_masquerade: true

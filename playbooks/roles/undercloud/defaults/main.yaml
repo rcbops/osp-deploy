@@ -13,7 +13,31 @@
 # limitations under the License.
 
 ---
+enabled_repositories:
+  - "rhel-7-server-rpms"
+  - "rhel-7-server-extras-rpms"
+  - "rhel-7-server-rh-common-rpms"
+  - "rhel-ha-for-rhel-7-server-rpms"
+  - "rhel-7-server-openstack-13-rpms"
+  - "rhel-7-server-openstack-13-optools-rpms"
+  - "rhel-7-server-rhceph-3-tools-rpms" 
 
+undercloud_packages:
+  - "python-tripleoclient"
+  - "ceph-ansible"
+  - "rhosp-director-images"
+  - "rhosp-director-images-ipa"
+  - "ntp"
+  - "tcpdump"
+  - "policycoreutils-python"
+  - "sysstat"
+  - "rsync"
+  - "tuned"
+  - "tmux"
+  - "wget"
+  - "net-tools"
+  - "libguestfs-tools"
+  
 undercloud_config_file: undercloud.conf.j2
 undercloud_install_cmd: openstack undercloud install
 undercloud_install_cli_options: ""
