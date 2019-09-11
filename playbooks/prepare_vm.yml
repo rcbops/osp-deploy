@@ -131,6 +131,7 @@
                          --network bridge=virbr0
                          --network bridge=br-ex 
                          --network bridge=br-ctlplane 
+                         --network bridge=br-ipmi
                          --graphics=vnc  
                          --initrd-inject "{{ item.value.ks_location }}"
                          --extra-args "ks=file:/{{ item.value.ks_location | basename }}" 
