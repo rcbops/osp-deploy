@@ -38,7 +38,6 @@ host_packages:
   - "virt-viewer"
   - "libvirt"
   - "git"
-  - "htop"
   
 pip_packages:
   - "libvirt-python"
