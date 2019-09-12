@@ -49,8 +49,14 @@ function configure_undercloud {
     fi
 }
 
-function configure_overcloud {
+function prepare_overcloud {
     prepare_venv 
+    pushd $PWD/playbooks
+    ansible-playbook -i inventory -i plugins/libvirt_inv.py prepare_overcloud.yml
+}
+
+function deploy_overcloud {
+    prepare_venv
     pushd $PWD/playbooks
     ansible-playbook -i inventory -i plugins/libvirt_inv.py deploy_overcloud.yml
 }

@@ -49,17 +49,27 @@ Modify group_vars/undercloud.yml for undercloud overrides, anything set in under
 ```
 It will prompt for RHEL credentials so that the VM can registered and packages can be downloaded.
 
-## Provision the Overcloud
+## Prepare the Overcloud
 
 * modify group_vars/all.yml settings
-* generate a new playbooks/files/instackenv.json for hosts 
+* generate a new playbooks/files/instackenv.json for hosts
+
+This will prep the steps necessary for Overcloud deployment including Introspection:
+
+```
+./prepare_overcloud.sh
+```
+
+## Provision the Overcloud
+
 * modify overcloud_templates for environment, this directory is copied to /home/stack/templates and used for 
 
 ```
 ./deploy_overcloud.sh
 ```
 
-The script will copy all of the template files and create a deploy script on the director node:
+The script will copy all of the template files and create a deploy script on the director node.  Then you'll log
+into the director node and kick off the overcloud deploy.
 
 ```
 ssh stack@director

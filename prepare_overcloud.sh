@@ -18,4 +18,4 @@ set -e
 # Import functions and variables
 source $PWD/scripts/functions.sh
 
-deploy_overcloud
+prepare_overcloud
