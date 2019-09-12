@@ -136,6 +136,7 @@
                          --initrd-inject "{{ item.value.ks_location }}"
                          --extra-args "ks=file:/{{ item.value.ks_location | basename }}" 
                          --os-variant=rhel7
+                         --autostart
       when: item.key not in vms.list_vms
       with_dict: "{{ virtual_machines }}"
       become: yes
