@@ -1,0 +1,124 @@
+---
+
+- name: Install required packages
+  yum:
+    name: "{{ host_packages }}"
+  become: yes
+
+- name: Install required PIP packages
+  pip:
+    name: "{{ pip_packages }}"
+    virtualenv: "{{ ansible_user_dir }}/osp"
+
+- name: Ensure libvirtd is started
+  service:
+    name: libvirtd
+    state: restarted
+    enabled: yes
+
+- name: Verify virtulization support
+  assert:
+    that:
+    - ansible_virtualization_type == "kvm"
+    msg:
+      "Host does not support virtualization, please enable in the bios and ensure that the proper kvm modules are loaded"
+  tags:
+    - "checks"
+
+- name: Verify that interfaces exist
+  assert:
+    that:
+    - item in ansible_interfaces
+    msg:
+      "Host does not have the needed interfaces configuired, please configure the {{ item }} bridge"
+  with_items:
+    - "{{ host_interfaces }}"
+  tags:
+    - "checks"
+
+- name: Set IP forwarding on hypervisor
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: Add libvirt group to stack user
+  user:
+    name: stack
+    groups: libvirt
+    append: yes
+  become: yes
+
+- name: Update permissions on libivrt images directory
+  file:
+    path: /var/lib/libvirt/images
+    group: libvirt
+    state: directory
+    mode: 0771
+  become: yes
+
+- name: Start and enable libvirt
+  service:
+    name: libvirtd
+    state: started
+
+- name: Download RHEL ISO to libvirt images
+  get_url:
+    url: "{{ rhel_iso_url }}"
+    dest: "{{ rhel_iso_path }}"
+
+- name: Create SSH Private Key
+  command: ssh-keygen -b 2048 -t rsa -f {{ ansible_user_dir }}/.ssh/id_rsa -q -N ""
+  args:
+    creates: "{{ ansible_user_dir }}/.ssh/id_rsa"
+
+- name: get list of VMS
+  virt:
+    command: "list_vms"
+  register: vms
+
+- name: Create kickstarts directory
+  file:
+    path: "{{ virtual_machines.director.ks_location | dirname }}"
+    state: directory
+
+- name: Create Kickstart file
+  template:
+    src: templates/rhel-ks.j2
+    dest: "{{ virtual_machines.director.ks_location }}"
+  when: item.key not in vms.list_vms
+  with_dict: "{{ virtual_machines }}"
+
+- name: Create VMs
+  command: >
+        virt-install --name "{{ item.key }}"
+                      --memory "{{ item.value.mem }}"
+                      --vcpus "{{ item.value.vcpus }}"
+                      --location "{{ item.value.iso_location }}"
+                      --disk size="{{ item.value.disk }}"
+                      --network bridge=virbr0
+                      --network bridge=br-ex
+                      --network bridge=br-ctlplane
+                      --network bridge=br-ipmi
+                      --graphics=vnc
+                      --initrd-inject "{{ item.value.ks_location }}"
+                      --extra-args "ks=file:/{{ item.value.ks_location | basename }}"
+                      --os-variant=rhel7
+                      --autostart
+  when: item.key not in vms.list_vms
+  with_dict: "{{ virtual_machines }}"
+  become: yes
+
+- name: Start Undercloud VM
+  virt:
+    name: "{{ item.key }}"
+    state: running
+  with_dict: "{{ virtual_machines }}"
+
+- name: Pause for a few seconds to let things settle
+  pause:
+    seconds: 30
+
+- meta: refresh_inventory
