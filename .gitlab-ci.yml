@@ -24,6 +24,9 @@ Prepare VM:
     refs:
       - merge_requests
       - schedules
+  except:
+    changes:
+      - "*.md"
 
 Deploy Undercloud:
   stage: undercloud
@@ -38,6 +41,9 @@ Deploy Undercloud:
     refs:
       - merge_requests
       - schedules
+  except:
+    changes:
+      - "*.md"
 
 Introspect:
   stage: introspect
@@ -52,6 +58,9 @@ Introspect:
     refs:
       - merge_requests
       - schedules
+  except:
+    changes:
+      - "*.md"
 
 Deploy Overcloud:
   stage: overcloud
@@ -64,3 +73,6 @@ Deploy Overcloud:
     refs:
       - merge_requests
       - schedules
+  except:
+    changes:
+      - "*.md"
