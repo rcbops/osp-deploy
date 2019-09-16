@@ -1,8 +1,11 @@
-# osp-deploy - test
+# osp-deploy
 
 Automates the Red Hat OpenStack Platform 13 process
 
-Work in Progress, for lab use only currently
+* Provisions a Director Node on Metal or within a VM
+* Prepares and configures the Undercloud
+* Introspects nodes
+* Deploys the Overcloud
 
 ## Provisioning a Director VM
 
@@ -27,6 +30,7 @@ We will need to make sure to have bridges available and up in the NIC configs.  
 
 * br-ctlplane
 * br-ex 
+* br-ipmi
 
 #### Virtualized Director
 
@@ -60,7 +64,7 @@ This will prep the steps necessary for Overcloud deployment including Introspect
 ./prepare_overcloud.sh
 ```
 
-## Provision the Overcloud
+## Provision the Overcloud (Under Development, recommend generating templates by hand)
 
 * modify overcloud_templates for environment, this directory is copied to /home/stack/templates and used for 
 
@@ -89,5 +93,5 @@ and overcloud deployment.  This ensures future changes don't break the existing 
 * Move settings to a better template/config structure that can be extracted out for a seperate configuration repo per environment
 * Move to specifiying template directory to avoid having to use config file naming in the deploy_overcloud template.
 * Add configuration capture script for capturing working config and making a config repo that can then be deployed.
-* Add simple RHEL Kickstart ISO/USB for getting director on-line
+* Add support for multiple versions outside of OSP 13
 * Cleanup
