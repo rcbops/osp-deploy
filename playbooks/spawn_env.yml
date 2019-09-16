@@ -29,6 +29,7 @@
                          --noautoconsole
                          --wait 0
                          --noreboot
+                         --autostart
       when: item.key not in vms.list_vms
       with_dict: "{{ virtual_machines_aio }}"
       become: yes
