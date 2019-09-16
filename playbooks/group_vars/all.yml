@@ -14,39 +14,9 @@
 
 ---
 
-# # Redhat Registration
-# rh_user: "{{ lookup('env', 'RPC_RH_USER') }}"
-# rh_password: "{{ lookup('env', 'RPC_RH_PASS') }}"
-# redhat_pool_id: "{{ lookup('env', 'RPC_POOL_ID') }}"
-
-host_packages:
-  - "@Virtualization Tools"
-  - "@Development tools"
-  - "libvirt-devel"
-  - "libvirt"
-  - "virt-install"
-  - "libvirt-python"
-  - "tmux"
-  - "libvirt-client"
-  - "libvirt-daemon"
-  - "qemu-kvm"
-  - "libvirt-daemon-driver-qemu"
-  - "libvirt-daemon-kvm"
-  - "virt-install"
-  - "bridge-utils"
-  - "rsync"
-  - "virt-viewer"
-  - "libvirt"
-  - "git"
-  
-pip_packages:
-  - "libvirt-python"
-
-host_interfaces:
-  - "br-ex"
-  - "br-ctlplane"
-  - "br-ipmi"
-  - "virbr0"
+##############################
+### Director VM Parameters ###
+##############################
 
 rhel_iso_url: "http://6f7450813e3580d17401-3ab35874dcd71892b6160b9e83e26245.r53.cf5.rackcdn.com/rhel-server-7.7-x86_64-dvd.iso"
 rhel_iso_path: "/var/lib/libvirt/images/rhel-server-7.7-x86_64-dvd.iso"
@@ -61,6 +31,98 @@ virtual_machines:
     gateway: 192.168.122.1
     iso_location: "{{ rhel_iso_path }}"
     ks_location: "/home/stack/osp-deploy/kickstarts/rhel-ks-director.cfg"
+
+
+########################################
+### Undercloud Configuration Options ###
+########################################
+undercloud_hostname: "director.localdomain"
+undercloud_name_servers:
+  - "1.1.1.1"
+  - "1.0.0.1"
+undercloud_ntp_servers:
+  - "0.pool.ntp.org"
+  - "1.pool.ntp.org"
+undercloud_local_mtu: "1500"
+undercloud_inspection_enable_uefi: true
+undercloud_generate_service_certificate: false
+
+# Undercloud certificate options
+# If you have a customer supplied certificate, you only need to specify the undercloud pem, and the director certificate location
+# where it is installed on the host
+undercloud_certificates_directory: "/home/stack/certificates"
+undercloud_service_certificate: "/etc/pki/instack-certs/undercloud.pem"
+undercloud_certificate_location: "{{ undercloud_certificates_directory }}/undercloud.crt"
+undercloud_ca_certificate_location: "/etc/pki/ca-trust/source/anchors/director-ca.crt.pem"
+
+# Network IP ranges. These shouldn't need to be updated unless this values will conflict with
+# the existing network configuration.
+# undercloud_vm_address: "192.168.122.50"
+# undercloud_vm_netmask: "255.255.255.0"
+undercloud_network_cidr: "192.168.24.0/24"
+undercloud_local_ip: "192.168.24.1/24"
+undercloud_public_host: "192.168.24.2"
+undercloud_admin_host: "192.168.24.3"
+undercloud_dhcp_start: "192.168.24.5"
+undercloud_dhcp_end: "192.168.24.34"
+undercloud_inspection_iprange:
+  - "192.168.24.100"
+  - "192.168.24.120"
+undercloud_inspection_gateway: "192.168.24.1"
+
+# if vlan is set on local_interface, set this to eth0.<vlan>
+undercloud_local_interface: "eth2"
+undercloud_masquerade: true
+undercloud_discovery_default_driver: "ipmi"
+undercloud_debug: false
+undercloud_update_packages: false
+
+# Enable specific Undercloud options
+undercloud_enable_tempest: true
+undercloud_enable_telemetry: false
+undercloud_enable_validations: false
+undercloud_enable_ui: false
+undercloud_enable_mistral: true
+undercloud_enable_ironic: true
+undercloud_ipxe_enabled: true
+undercloud_clean_nodes: true
+undercloud_enabled_hardware_types: "ipmi"
+undercloud_uefi_flavors: false
+
+#######################################
+### overcloud configuration options ###
+#######################################
+
+# Enable Open Virutal Networking plugin
+overcloud_ovn_enabled: true
+
+# Enable CEPH, and RadosGW
+overcloud_ceph_enabled: false
+
+# Enable Octavia Load Balancing 
+overcloud_octavia_enabled: true
+
+# Enable Sahara OpenStack Data Processing Services
+overcloud_sahara_enabled: true
+
+# Enable Barbican Key Storage Services
+overcloud_barbican_enabled: true
+
+# Enable OpenStack Shared File System Storage
+overcloud_manila_enabled: false
+# Manila Storage backend, available options are cephfsnative, netapp, cephfsganesha
+# Currently only support cephfsnative 
+# Disabling for cephnfs testing - 
+# overcloud_manila_backend: "cephfsnative"
+overcloud_manila_backend: "cephfsganesha"
+
+# Enable Local Docker image Registry, if false, it will use the remote registry
+overcloud_enable_local_registry: true
+overcloud_rhn_enabled: true
+
+###########################################################
+### AIO Testing Parameters - Can ignore for deployments ###
+###########################################################
 
 virtual_machines_aio:
   overcloud-controller-0:
@@ -108,34 +170,3 @@ virtual_machines_aio:
     netmask: 255.255.255.0
     gateway: 192.168.122.1
     vbmc_port: 6628
-
-undercloud_hostname: "director.localdomain"
-
-# Enable Open Virutal Networking plugin
-overcloud_ovn_enabled: true
-
-# Enable CEPH, and RadosGW
-overcloud_ceph_enabled: false
-
-# Enable Octavia Load Balancing 
-overcloud_octavia_enabled: true
-
-# Enable Sahara OpenStack Data Processing Services
-overcloud_sahara_enabled: true
-
-# Enable Barbican Key Storage Services
-overcloud_barbican_enabled: true
-
-# Enable OpenStack Shared File System Storage
-overcloud_manila_enabled: false
-# Manila Storage backend, available options are cephfsnative, netapp, cephfsganesha
-# Currently only support cephfsnative 
-# Disabling for cephnfs testing - 
-# overcloud_manila_backend: "cephfsnative"
-overcloud_manila_backend: "cephfsganesha"
-
-# Enable Local Docker image Registry, if false, it will use the remote registry
-overcloud_enable_local_registry: true
-overcloud_rhn_enabled: true
-
-undercloud_uefi_flavors: false

@@ -1,0 +1,30 @@
+---
+
+host_packages:
+  - "@Virtualization Tools"
+  - "@Development tools"
+  - "libvirt-devel"
+  - "libvirt"
+  - "virt-install"
+  - "libvirt-python"
+  - "tmux"
+  - "libvirt-client"
+  - "libvirt-daemon"
+  - "qemu-kvm"
+  - "libvirt-daemon-driver-qemu"
+  - "libvirt-daemon-kvm"
+  - "virt-install"
+  - "bridge-utils"
+  - "rsync"
+  - "virt-viewer"
+  - "libvirt"
+  - "git"
+  
+pip_packages:
+  - "libvirt-python"
+
+host_interfaces:
+  - "br-ex"
+  - "br-ctlplane"
+  - "br-ipmi"
+  - "virbr0"
