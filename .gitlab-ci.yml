@@ -68,7 +68,7 @@ Deploy Overcloud:
     - osp
   script:
     - ./deploy_overcloud.sh
-    - ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
+    #- ssh stack@192.168.122.50 "scripts/deploy_overcloud.sh"
   only:
     refs:
       - merge_requests

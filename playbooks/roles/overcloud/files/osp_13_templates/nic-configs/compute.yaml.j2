@@ -1,6 +1,6 @@
 heat_template_version: queens
 description: >
-  Software Config to drive os-net-config with 2 bonded nics on a bridge with VLANs attached for the compute role.
+  Software Config to drive os-net-config with 2 bonded nics on a bridge with VLANs attached for the Compute role.
 parameters:
   ControlPlaneIp:
     default: ''
@@ -31,15 +31,11 @@ parameters:
     description: IP address/subnet on the management network
     type: string
   BondInterfaceOvsOptions:
-    default: ''
+    default: bond_mode=active-backup
     description: 'The ovs_options or bonding_options string for the bond
       interface. Set things like lacp=active and/or bond_mode=balance-slb
       for OVS bonds or like mode=4 for Linux bonds using this option.'
     type: string
-    constraints:
-    - allowed_pattern: ^((?!balance.tcp).)*$
-      description: 'The balance-tcp bond mode is known to cause packet loss and
-        should not be used in BondInterfaceOvsOptions.'
   ExternalNetworkVlanID:
     default: 10
     description: Vlan ID for the external network traffic.
@@ -71,11 +67,11 @@ parameters:
   ControlPlaneDefaultRoute: # Override this via parameter_defaults
     description: The default route of the control plane network.
     type: string
-  ExternalInterfaceDefaultRoute: # Not used by default in this template
-    default: 10.0.0.1
+  ExternalInterfaceDefaultRoute:
+    default: unset
     description: The default route of the external network.
     type: string
-  ManagementInterfaceDefaultRoute: # Commented out by default in this template
+  ManagementInterfaceDefaultRoute:
     default: unset
     description: The default route of the management network.
     type: string
@@ -108,14 +104,21 @@ resources:
                     - - get_param: ControlPlaneIp
                       - get_param: ControlPlaneSubnetCidr
                 routes:
-                - default: true
-                  next_hop:
-                    get_param: ControlPlaneDefaultRoute                
                 - ip_netmask: 169.254.169.254/32
                   next_hop:
                     get_param: EC2MetadataIp
+              - type: vlan
+                device: eno1
+                mtu: 1500
+                vlan_id: {get_param: ManagementNetworkVlanID}
+                addresses:
+                  - ip_netmask: {get_param: ManagementIpSubnet}
+                use_dhcp: false
                 dns_servers:
-                  get_param: DnsServers 
+                  get_param: DnsServers
+                routes:
+                - default: true
+                  next_hop: {get_param: ManagementInterfaceDefaultRoute}
               - type: interface
                 name: eno2
                 use_dhcp: false
@@ -125,14 +128,8 @@ resources:
               - type: interface
                 name: eno4
                 use_dhcp: false
-              - type: interface
-                name: eno5
-                use_dhcp: false
-              - type: interface
-                name: eno6
-                use_dhcp: false
               - type: ovs_bridge
-                name: bridge_name
+                name: br-mgmt
                 members:
                 - type: linux_bond
                   name: bond0
@@ -141,24 +138,11 @@ resources:
                     get_param: BondInterfaceOvsOptions
                   members:
                   - type: interface
-                    name: eno5
+                    name: eno49
                     mtu: 9000
                   - type: interface
-                    name: ens4f0
+                    name: ens2f0
                     mtu: 9000
-                - type: vlan
-                  device: bond0
-                  mtu: 1500
-                  vlan_id:
-                    get_param: ManagementNetworkVlanID
-                  use_dhcp: false
-                  addresses:
-                  - ip_netmask:
-                      get_param: ManagementIpSubnet 
-                  routes:
-                  - ip_netmask: ManagementNetCidr
-                    next_hop:
-                      get_param: ManagementInterfaceDefaultRoute
                 - type: vlan
                   device: bond0
                   mtu: 1500
@@ -170,7 +154,7 @@ resources:
                       get_param: InternalApiIpSubnet
                 - type: vlan
                   device: bond0
-                  mtu: 1500
+                  mtu: 9000
                   vlan_id:
                     get_param: StorageNetworkVlanID
                   use_dhcp: false
@@ -178,7 +162,7 @@ resources:
                   - ip_netmask:
                       get_param: StorageIpSubnet
               - type: ovs_bridge
-                name: br-storage
+                name: bridge_name
                 members:
                 - type: linux_bond
                   name: bond1
@@ -187,30 +171,21 @@ resources:
                     get_param: BondInterfaceOvsOptions
                   members:
                   - type: interface
-                    name: eno6
+                    name: eno50
                     mtu: 9000
                   - type: interface
-                    name: ens4f1
+                    name: ens2f1
                     mtu: 9000
                 - type: vlan
                   device: bond1
-                  mtu: 1500
-                  use_dhcp: false
-                  vlan_id: 
-                    get_param: StorageNetworkVlanID
-                  addresses:
-                  - ip_netmask: 
-                      get_param: StorageIpSubnet
-                - type: vlan
-                  device: bond1
-                  mtu: 1500
+                  mtu: 9000
                   vlan_id:
-                    get_param: StorageMgmtNetworkVlanID
+                    get_param: TenantNetworkVlanID
                   use_dhcp: false
                   addresses:
                   - ip_netmask:
-                      get_param: StorageMgmtIpSubnet
-
+                      get_param: TenantIpSubnet
+ 
 outputs:
   OS::stack_id:
     description: The OsNetConfigImpl resource.

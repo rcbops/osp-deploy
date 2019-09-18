@@ -1,0 +1,105 @@
+resource_registry:
+  OS::TripleO::Controller::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external_from_pool.yaml
+  OS::TripleO::Controller::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Controller::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt_from_pool.yaml
+  OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+  OS::TripleO::Controller::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/management_from_pool.yaml
+ 
+  OS::TripleO::Compute::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Compute::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Compute::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Compute::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::Compute::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+  OS::TripleO::Compute::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/management_from_pool.yaml
+ 
+  OS::TripleO::CephStorage::Ports::ExternalPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::CephStorage::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::CephStorage::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::CephStorage::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt_from_pool.yaml
+  OS::TripleO::CephStorage::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/noop.yaml
+  OS::TripleO::CephStorage::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/management_from_pool.yaml
+ 
+parameter_defaults:
+  ControllerSchedulerHints:
+    'capabilities:node': 'controller-%index%'
+  ComputeSchedulerHints:
+    'capabilities:node': 'compute-%index%'
+  CephStorageSchedulerHints:
+    'capabilities:node': 'cephstorage-%index%'
+  HostnameMap:
+    ## NOTES ##
+    # Confirm blacklisted nodes before adding new ones, blacklist nodes cannot be re-used
+    #   sudo mysql -uroot -p
+    #   use heat; select resource_data.value,resource.name from resource,resource_data where resource_data.`key`="name_blacklist" and resource_data.resource_id=resource.id;
+    ## NOTES ##
+    <Stack Name>-controller-0: <CORE ID>-<Customer Environment>-controller01
+    <Stack Name>-controller-1: <CORE ID>-<Customer Environment>-controller02
+    <Stack Name>-controller-2: <CORE ID>-<Customer Environment>-controller03
+    <Stack Name>-compute-0: <CORE ID>-<Customer Environment>-compute01
+    <Stack Name>-compute-1: <CORE ID>-<Customer Environment>-compute02
+    <Stack Name>-cephstorage-0: <CORE ID>-<Customer Environment>-ceph01
+    <Stack Name>-cephstorage-1: <CORE ID>-<Customer Environment>-ceph02
+    <Stack Name>-cephstorage-2: <CORE ID>-<Customer Environment>-ceph03
+    <Stack Name>-cephstorage-3: <CORE ID>-<Customer Environment>-ceph04
+    <Stack Name>-cephstorage-4: <CORE ID>-<Customer Environment>-ceph05
+ 
+  ControllerIPs:
+    external:
+    - <External Net>.51
+    - <External Net>.52
+    - <External Net>.53
+    internal_api:
+    - <Internal API Net>.51
+    - <Internal API Net>.52
+    - <Internal API Net>.53
+    storage:
+    - <Storage FE Net>.51
+    - <Storage FE Net>.52
+    - <Storage FE Net>.53
+    storage_mgmt:
+    - <Storage BE Net>.51
+    - <Storage BE Net>.52
+    - <Storage BE Net>.53
+    tenant:
+    - <Tenant/Tunnel Net>.51
+    - <Tenant/Tunnel Net>.52
+    - <Tenant/Tunnel Net>.53
+    management:
+    - <IP from CORE for controller01>
+    - <IP from CORE for controller02>
+    - <IP from CORE for controller03>
+ 
+  ComputeIPs:
+    internal_api:
+    - <Internal API Net>.54
+    - <Internal API Net>.55
+    storage:
+    - <Storage FE Net>.54
+    - <Storage FE Net>.55
+    tenant:
+    - <Tenant/Tunnel Net>.54
+    - <Tenant/Tunnel Net>.55
+    management:
+    - <IP from CORE for compute01>
+    - <IP from CORE for compute02>
+ 
+  CephStorageIPs:
+    storage:
+    - <Storage FE Net>.61
+    - <Storage FE Net>.62
+    - <Storage FE Net>.63
+    - <Storage FE Net>.64
+    - <Storage FE Net>.65
+    storage_mgmt:
+    - <Storage BE Net>.61
+    - <Storage BE Net>.62
+    - <Storage BE Net>.63
+    - <Storage BE Net>.64
+    - <Storage BE Net>.65
+    management:
+    - <IP from CORE for ceph01>
+    - <IP from CORE for ceph02>
+    - <IP from CORE for ceph03>
+    - <IP from CORE for ceph04>
+    - <IP from CORE for ceph05>

@@ -1,0 +1,108 @@
+parameter_defaults:
+  ManagePolling: true
+  ManagePipeline: true
+  PipelinePublishers:
+    - gnocchi://?archive_policy=medium
+  EventPipelinePublishers:
+    - gnocchi://?archive_policy=medium
+    - panko://
+  GnocchiArchivePolicy: 'medium'
+  CeilometerStoreEvents: true
+  CeilometerMeteringTTL: 1296000
+  CeilometerEventTTL: 1296000
+  RabbitUserName: "admin"
+  RabbitPassword: "<Random password for RabbitMQ admin>"
+  RedisPassword: "<Random password for Redis. If using external loadbalancer, on device password must match>"
+  RabbitFDLimit: 65436
+  MysqlMaxConnections: 10240
+  NovaSchedulerDefaultFilters:
+    - RetryFilter
+    - AvailabilityZoneFilter
+    - RamFilter
+    - CoreFilter
+    - ComputeFilter
+    - DiskFilter
+    - ImagePropertiesFilter
+    - ServerGroupAntiAffinityFilter
+    - ServerGroupAffinityFilter
+    - AggregateMultiTenancyIsolation
+    - AggregateInstanceExtraSpecsFilter
+    - ComputeCapabilitiesFilter
+  PankoEventTTL: 1296000
+ 
+  ExtraConfig:
+    snmp::ro_community: "my_random_commun1t3"
+    snmp::ro_community6: "myv6_random_commun1t3"
+ 
+  ExtraConfig:
+    snmp::ro_community: "my_random_commun1t3"
+    snmp::ro_community6: "myv6_random_commun1t3"
+    tripleo::haproxy::cinder::options:
+      "timeout client": '15m'
+      'timeout server': '15m'
+    tripleo::haproxy::octavia::options:
+      "timeout client": '20m'
+      'timeout server': '20m'
+  
+  ControllerExtraConfig:
+    tripleo::profile::base::database::mysql::innodb_buffer_pool_size: '10G'
+    tripleo::profile::base::database::mysql::innodb_flush_method: 'O_DIRECT'
+    ceilometer::agent::polling::polling_interval: 60
+    nova::init::cpu_allocation_ratio: "2.0"
+    nova::init::disk_allocation_ratio: "1.0"
+    nova::init::ram_allocation_ratio: "1.0"
+    nova::block_device_allocate_retries: 900
+    nova::block_device_allocate_retries_interval: "10"
+    nova::block_device_creation_timeout: 900
+    nova::rpc_response_timeout: "360"
+    nova::config::nova_config:
+        DEFAULT/max_concurrent_builds:
+            value: '5'
+        DEFAULT/running_timeout:
+            value: '360'
+    nova::api::max_limit: 4096
+    heat::config::heat_config:
+        DEFAULT/max_stacks_per_tenant:
+            value: '2048'
+ 
+  ComputeExtraConfig:
+    ceilometer::agent::polling::polling_interval: 60
+    nova::block_device_allocate_retries: 900
+    nova::block_device_allocate_retries_interval: "10"
+    nova::block_device_creation_timeout: 900
+    nova::rpc_response_timeout: "360"
+    nova::config::nova_config:
+        DEFAULT/running_timeout:
+            value: '360'
+ 
+  SshServerOptions:
+    UseDns: 'no'
+ 
+  TunedCustomProfile: |
+    [main]
+    summary=A high performance Tuned profile for Overloud Nodes
+    include=throughput-performance
+    [cpu]
+    governor=performance
+    energy_perf_bias=performance
+    min_perf_pct=100
+    force_latency=1
+    [sysctl]
+    kernel.sched_migration_cost_ns=5000000
+    fs.aio-max-nr=1048576
+    kernel.pid_max=4194303
+    fs.file-max=26234859
+    vm.min_free_kbytes=2097152
+    vm.swappiness=1
+    vm.dirty_background_ratio=5
+    net.core.rmem_max=268435456
+    net.core.wmem_max=268435456
+    net.core.optmem_max=40960
+    net.core.netdev_max_backlog=40960
+    net.core.somaxconn=8192
+    net.ipv4.tcp_rmem=4096 87380 134217728
+    net.ipv4.tcp_wmem=4096 65536 134217728
+    net.ipv4.tcp_max_syn_backlog=40960
+    net.ipv4.tcp_max_tw_buckets=1835008
+    net.netfilter.nf_conntrack_max=1048576
+  TunedProfileName: overcloud-performance
