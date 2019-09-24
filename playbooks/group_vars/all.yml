@@ -20,7 +20,6 @@
 
 rhel_iso_url: "http://6f7450813e3580d17401-3ab35874dcd71892b6160b9e83e26245.r53.cf5.rackcdn.com/rhel-server-7.7-x86_64-dvd.iso"
 rhel_iso_path: "/var/lib/libvirt/images/rhel-server-7.7-x86_64-dvd.iso"
-
 virtual_machines:
   director:
     mem: 16384
@@ -37,6 +36,7 @@ virtual_machines:
 ### Undercloud Configuration Options ###
 ########################################
 undercloud_hostname: "director.localdomain"
+redhat_osp_version: 13
 undercloud_name_servers:
   - "1.1.1.1"
   - "1.0.0.1"
@@ -93,20 +93,26 @@ undercloud_uefi_flavors: false
 ### overcloud configuration options ###
 #######################################
 
+# Overcloud stack name
+overcloud_stack_name: overcloud
+
+# Set to true if using an External LB, else set to false for haproxy
+overcloud_external_lb_enabled: false
+
 # Enable Open Virutal Networking plugin
-overcloud_ovn_enabled: true
+overcloud_ovn_enabled: false
 
 # Enable CEPH, and RadosGW
 overcloud_ceph_enabled: false
 
 # Enable Octavia Load Balancing 
-overcloud_octavia_enabled: true
+overcloud_octavia_enabled: false
 
 # Enable Sahara OpenStack Data Processing Services
-overcloud_sahara_enabled: true
+overcloud_sahara_enabled: false
 
 # Enable Barbican Key Storage Services
-overcloud_barbican_enabled: true
+overcloud_barbican_enabled: false
 
 # Enable OpenStack Shared File System Storage
 overcloud_manila_enabled: false
@@ -118,11 +124,15 @@ overcloud_manila_backend: "cephfsganesha"
 
 # Enable Local Docker image Registry, if false, it will use the remote registry
 overcloud_enable_local_registry: true
-overcloud_rhn_enabled: true
+overcloud_rhn_enabled: false
+overcloud_rackspace_tuning: false
 
 ###########################################################
 ### AIO Testing Parameters - Can ignore for deployments ###
 ###########################################################
+
+# Set this to aio if testing gating, otherwise leave as is
+overcloud_deploy_type: multi
 
 virtual_machines_aio:
   overcloud-controller-0:

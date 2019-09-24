@@ -1,0 +1,14 @@
+# title: Inject SSL Trust Anchor on Overcloud Nodes
+# description: |
+#   When using an SSL certificate signed by a CA that is not in the default
+#   list of CAs, this environment allows adding a custom CA certificate to
+#   the overcloud nodes.
+parameter_defaults:
+  # Map containing the CA certs and information needed for deploying them.
+  # Type: json
+  CAMap:
+    director-ca:
+      content: |
+        -----BEGIN CERTIFICATE-----
+        <Insert the contents of director-cacert.pem here>
+        -----END CERTIFICATE-----

@@ -1,0 +1,45 @@
+parameter_defaults:
+  CephAnsiblePlaybookVerbosity: 1
+  CephAnsibleExtraConfig:
+    ceph_osd_docker_cpu_limit: 0
+  CephAnsibleDisksConfig:
+    osd_objectstore: bluestore
+    osd_scenario: lvm
+    devices:
+      - /dev/sdb
+      - /dev/sdc
+      - /dev/sdd
+      - /dev/sde
+      - /dev/sdf
+      - /dev/sdg
+      - /dev/sdh
+      - /dev/sdi
+      - /dev/sdj
+      - /dev/sdk
+      - /dev/sdl
+      - /dev/sdm
+      - /dev/sdn
+      - /dev/sdo
+      - /dev/sdp
+      - /dev/sdq
+      - /dev/sdr
+      - /dev/sds
+      - /dev/sdt
+      - /dev/sdu
+ 
+  CephPools:
+    - name: volumes
+      pg_num: 128
+      application: rbd
+    - name: vms
+      pg_num: 128
+      application: rbd
+    - name: backups
+      pg_num: 32
+      application: rbd
+    - name: images
+      pg_num: 64
+      application: rbd
+    - name: metrics
+      pg_num: 64
+      application: openstack_gnocchi

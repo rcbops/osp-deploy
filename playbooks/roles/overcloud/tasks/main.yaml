@@ -1,17 +1,34 @@
 ---
 
-- name: Install templates 
+- name: Create directories
+  file:
+    path: "/home/stack/{{ item }}"
+    state: directory
+    owner: stack
+    group: stack
+  with_items:
+    - scripts
+    - templates
+
+- name: Create image_prepare script
+  template:
+    src: scripts/image_prepare.sh.j2
+    dest: /home/stack/scripts/image_prepare.sh
+    mode: 0755
+  tags:
+   - scripts
+
+- name: Run image_prepare script
+  shell: |
+     /home/stack/scripts/image_prepare.sh
+
+- name: Install boilerplate templates 
   block:
-  - name: Copy over overcloud templates
-    copy:
-      src: "overcloud_templates/"
-      dest: "/home/stack/templates"
- 
   - name: Create any missing template directories
     file:
       path: "/home/stack/templates/{{ item.path }}"
       state: directory
-    with_filetree: "templates"
+    with_filetree: "osp_{{ redhat_osp_version }}_templates"
     when:
       - item.state == 'directory'
   
@@ -19,17 +36,20 @@
     template:
       src: "{{ item.src }}"
       dest: "/home/stack/templates/{{ item.path | regex_replace('.j2', '') }}"
-    with_filetree: "templates"
+    with_filetree: "osp_{{ redhat_osp_version }}_templates"
     when:
       - item.state == 'file'
-  tags:
-  - overcloud
-  - overcloud_templates
+
+- name: Create deploy_overcloud.sh aio script
+  template:
+    src: scripts/deploy_overcloud.sh-aio.j2
+    dest: /home/stack/scripts/deploy_overcloud.sh
+    mode: 0755
+  when: overcloud_deploy_type == "aio"
 
 - name: Create deploy_overcloud.sh script
   template:
     src: scripts/deploy_overcloud.sh.j2
     dest: /home/stack/scripts/deploy_overcloud.sh
     mode: 0755
-  tags:
-   - scripts
+  when: overcloud_deploy_type != "aio"

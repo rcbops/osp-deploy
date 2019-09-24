@@ -1,0 +1,51 @@
+resource_registry:
+  OS::TripleO::Compute::Net::SoftwareConfig:
+    /home/stack/templates/nic-configs/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig:
+    /home/stack/templates/nic-configs/controller.yaml
+  OS::TripleO::CephStorage::Net::SoftwareConfig:
+    /home/stack/templates/nic-configs/ceph-storage.yaml
+ 
+parameter_defaults:
+  ControlPlaneSubnetCidr: "22"
+  ControlPlaneDefaultRoute: <CTLPLANE IP OF DIRECTOR>
+  EC2MetadataIp: <CTLPLANE IP OF DIRECTOR>
+  InternalApiNetCidr: <INTERNAL API NET CIDR>
+  StorageNetCidr: <STORAGE FE NET CIDR>
+  StorageMgmtNetCidr: <STORAGE BE NET CIDR>
+  TenantNetCidr: <TUNNEL/TENANT NET CIDR>
+{% if overcloud_external_lb_enabled | bool %}
+  ExternalNetCidr: <PUBLIC VIP with a /24 on the end(ex: VIP is 69.20.19.64, use 69.20.19.0/24)>
+{% else %}
+  ExternalNetCidr: <EXTERNAL NET CIDR>
+{% endif %}
+  ManagementNetCidr: <MANAGEMENT NET CIDR>
+  InternalApiNetworkVlanID: <INTERNAL API VLAN ID>
+  StorageNetworkVlanID: <STORAGE FE VLAN ID>
+  StorageMgmtNetworkVlanID: <STORAGE BE VLAN ID>
+  TenantNetworkVlanID: <TUNNEL/TENANT NET VLAN ID>
+  ExternalNetworkVlanID: <EXTERNAL NET VLAN ID>
+  ManagementNetworkVlanID: <MANAGEMENT NET VLAN ID>
+  InternalApiAllocationPools: [{'start': '172.29.236.54', 'end': '172.29.239.254'}]
+  StorageAllocationPools: [{'start': '172.29.248.54', 'end': '172.29.251.254'}]
+  StorageMgmtAllocationPools: [{'start': '172.29.244.54', 'end': '172.29.247.254'}]
+  TenantAllocationPools: [{'start': '172.29.240.54', 'end': '172.29.243.254'}]
+{% if overcloud_external_lb_enabled | bool %}
+  ExternalAllocationPools: [{'start': '<Fake Public VIP Net Start (From example above: 69.20.19.5>', 'end': '<Fake Public VIP Net End (From example above: 69.20.19.254>'}]
+{% else %}
+  ExternalAllocationPools: [{'start': '10.240.0.54', 'end': '10.240.3.254'}]
+{% endif %}
+  ManagementAllocationPools: [{'start': '10.239.0.51', 'end': '10.239.3.254'}]
+  ExternalInterfaceDefaultRoute: <MANAGEMENT NET GATEWAY>
+  ManagementInterfaceDefaultRoute: <MANAGEMENT NET GATEWAY>
+  DnsServers: ['<DC DNS SERVER 1>', '<DC DNS SERVER 2>']
+  NeutronNetworkType: 'vxlan,vlan'
+  NeutronTunnelTypes: 'vxlan'
+{% if overcloud_external_lb_enabled | bool %}
+  NeutronNetworkVLANRanges: 'datacentre:1:4094'
+{% else %}
+  # Neutron VLAN ranges per network, for example 'datacentre:1:499,tenant:500:1000':
+  # Default is to allow any vlan on the datacentre network
+  #NeutronNetworkVLANRanges: 'datacentre:1:1000'
+{% endif %}
+  BondInterfaceOvsOptions: "mode=802.3ad ad_select=bandwidth lacp_rate=slow xmit_hash_policy=layer3+4 miimon=100"

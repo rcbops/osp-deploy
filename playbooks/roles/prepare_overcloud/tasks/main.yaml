@@ -118,15 +118,3 @@
   tags: 
     - flavor_update
   when: undercloud_uefi_flavors | bool   
-
-- name: Create image_prepare script
-  template:
-    src: scripts/image_prepare.sh.j2
-    dest: /home/stack/scripts/image_prepare.sh
-    mode: 0755
-  tags: 
-   - scripts
-
-- name: Run image_prepare script
-  shell: |
-     /home/stack/scripts/image_prepare.sh

@@ -1,0 +1,23 @@
+resource_registry:
+  OS::TripleO::Network::Ports::ExternalVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/external.yaml
+  OS::TripleO::Network::Ports::InternalApiVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api.yaml
+  OS::TripleO::Network::Ports::StorageVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage.yaml
+  OS::TripleO::Network::Ports::StorageMgmtVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt.yaml
+  OS::TripleO::Network::Ports::RedisVipPort: /usr/share/openstack-tripleo-heat-templates/network/ports/vip.yaml
+  OS::TripleO::Controller::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Controller::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt_from_pool.yaml
+  OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+  OS::TripleO::Controller::Ports::ManagementPort: /usr/share/openstack-tripleo-heat-templates/network/ports/management_from_pool.yaml
+ 
+parameter_defaults:
+  ServiceNetMap:
+    KeystoneAdminApiNetwork: internal_api
+    IronicApiNetwork: internal_api
+  ControlFixedIPs: [{'ip_address':'<Public Host IP (VIP) of Director'}]
+  PublicVirtualFixedIPs: [{'ip_address':'<Public VIP'}]
+  InternalApiVirtualFixedIPs: [{'ip_address':'<Internal VIP'}]
+  StorageVirtualFixedIPs: [{'ip_address':'<Storage FE Net>.5'}]
+  StorageMgmtVirtualFixedIPs: [{'ip_address':'<Storage BE Net>.5'}]
+  RedisVirtualFixedIPs: [{'ip_address':'<Redis Internal VIP'}]
+  EnableLoadBalancer: false
