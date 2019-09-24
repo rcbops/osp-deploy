@@ -32,7 +32,7 @@ sshkey --user=stack "{{lookup('file', '{{ ansible_user_dir }}/.ssh/id_rsa.pub') 
 
 # System bootloader configuration
 bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=vda
-autopart --type=lvm
+autopart --type=lvm --nohome
 # Partition clearing information
 clearpart --none --initlabel
 
@@ -58,4 +58,7 @@ pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
 echo "stack ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/stack
 chmod 0440 /etc/sudoers.d/stack
 restorecon /etc
+# grow / filesystem since autopart limits / to 50GB
+lvextend -l +100%FREE /dev/rhel_director/root
+xfs_growfs /
 %end
