@@ -24,7 +24,7 @@ virtual_machines:
   director:
     mem: 16384
     vcpus: 8
-    disk: 100
+    disk: 200
     address: 192.168.122.50
     netmask: 255.255.255.0
     gateway: 192.168.122.1
