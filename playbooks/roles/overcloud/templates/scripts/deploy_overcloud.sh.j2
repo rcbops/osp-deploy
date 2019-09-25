@@ -46,8 +46,9 @@ openstack overcloud deploy \
    -e /home/stack/templates/60-rackspace-tuning.yaml \
 {% endif %}
 {% if overcloud_rhn_enabled | bool %}
-   -e /home/stack/templates/61-environment-rhel-registration.yaml \
-   -e /home/stack/templates/62-rhel-registration-resource-registry.yaml \
+   # uncomment once successful deploy has occurred
+   # -e /home/stack/templates/61-environment-rhel-registration.yaml \
+   # -e /home/stack/templates/62-rhel-registration-resource-registry.yaml \
 {% endif %}
 {% if overcloud_octavia_enabled | bool %}
    -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/octavia.yaml \
