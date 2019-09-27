@@ -8,11 +8,9 @@ parameter_defaults:
     - panko://
   GnocchiArchivePolicy: 'medium'
   CeilometerStoreEvents: true
-  CeilometerMeteringTTL: 1296000
-  CeilometerEventTTL: 1296000
   RabbitUserName: "admin"
-  RabbitPassword: "<Random password for RabbitMQ admin>"
-  RedisPassword: "<Random password for Redis. If using external loadbalancer, on device password must match>"
+  RabbitPassword: "<RANDOM 32 CHARACTER PASSWORD>"
+  RedisPassword: "<RANDOM 32 CHARACTER PASSWORD>"
   RabbitFDLimit: 65436
   MysqlMaxConnections: 10240
   NovaSchedulerDefaultFilters:
@@ -29,10 +27,11 @@ parameter_defaults:
     - AggregateInstanceExtraSpecsFilter
     - ComputeCapabilitiesFilter
   PankoEventTTL: 1296000
- 
-  ExtraConfig:
-    snmp::ro_community: "my_random_commun1t3"
-    snmp::ro_community6: "myv6_random_commun1t3"
+
+  ComputeParameters:
+    NovaReservedHostMemory: '8192'
+    NovaLibvirtRxQueueSize: 1024
+    NovaLibvirtTxQueueSize: 1024
  
   ExtraConfig:
     snmp::ro_community: "my_random_commun1t3"
@@ -43,8 +42,9 @@ parameter_defaults:
     tripleo::haproxy::octavia::options:
       "timeout client": '20m'
       'timeout server': '20m'
-  
+ 
   ControllerExtraConfig:
+    tripleo::haproxy::ssl_options: no-sslv3 no-tlsv10 no-tlsv11
     tripleo::profile::base::database::mysql::innodb_buffer_pool_size: '10G'
     tripleo::profile::base::database::mysql::innodb_flush_method: 'O_DIRECT'
     ceilometer::agent::polling::polling_interval: 60
@@ -64,7 +64,14 @@ parameter_defaults:
     heat::config::heat_config:
         DEFAULT/max_stacks_per_tenant:
             value: '2048'
- 
+    octavia::housekeeping::amphora_expiry_age: 259200
+    octavia::housekeeping::load_balancer_expiry_age: 259200
+    octavia::config:
+      DEFAULT/health_check_interval:
+        value: 10
+      DEFAULT/heartbeat_interval:
+        value: 30
+
   ComputeExtraConfig:
     ceilometer::agent::polling::polling_interval: 60
     nova::block_device_allocate_retries: 900
@@ -74,10 +81,26 @@ parameter_defaults:
     nova::config::nova_config:
         DEFAULT/running_timeout:
             value: '360'
- 
+
   SshServerOptions:
     UseDns: 'no'
- 
+
+  BannerText: |
+    ******************************************************************
+    * This system is for the use of authorized users only. Usage of  *
+    * this system may be monitored and recorded by system personnel. *
+    * Anyone using this system expressly consents to such monitoring *
+    * and is advised that if such monitoring reveals possible        *
+    * evidence of criminal activity, system personnel may provide    *
+    * the evidence from such monitoring to law enforcement officials.*
+    ******************************************************************
+
+  MessageOfTheDay: |
+    ******************************************************************
+    * ALERT! You are entering into a secured area!                   *
+    * This service is restricted to authorized users only.           *
+    ******************************************************************
+
   TunedCustomProfile: |
     [main]
     summary=A high performance Tuned profile for Overloud Nodes

@@ -89,6 +89,20 @@ undercloud_clean_nodes: true
 undercloud_enabled_hardware_types: "ipmi"
 undercloud_uefi_flavors: false
 
+#undercloud_generate_certificate: false
+#undercloud_common_name: "{{ ansible_fqdn }}"
+#undercloud_country_name: "US"
+#undercloud_state_name: "TX"
+#undercloud_locality_name: "San Antonio"
+#undercloud_organization_name: "Rackspace"
+#undercloud_organization_unit_name: "RPC"
+#undercloud_private_key_location: "{{ undercloud_certificates_directory }}/undercloud.key"
+#undercloud_pem_location: "{{ undercloud_certificates_directory }}/undercloud.pem"
+
+#undercloud_san:
+#  - "IP.1 = {{ undercloud_public_host }}"
+#  - "IP.2 = {{ undercloud_admin_host }}"
+
 #######################################
 ### overcloud configuration options ###
 #######################################
@@ -98,6 +112,9 @@ overcloud_stack_name: overcloud
 
 # Set to true if using an External LB, else set to false for haproxy
 overcloud_external_lb_enabled: false
+
+# Set to true to enable vxlan
+overcloud_neutron_vxlan_enabled: true
 
 # Enable Open Virutal Networking plugin
 overcloud_ovn_enabled: false

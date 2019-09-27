@@ -7,6 +7,8 @@ resource_registry:
     /home/stack/templates/nic-configs/ceph-storage.yaml
  
 parameter_defaults:
+  ServiceNetMap:
+    KeystoneAdminApiNetwork: internal_api
   ControlPlaneSubnetCidr: "22"
   ControlPlaneDefaultRoute: <CTLPLANE IP OF DIRECTOR>
   EC2MetadataIp: <CTLPLANE IP OF DIRECTOR>
@@ -39,8 +41,13 @@ parameter_defaults:
   ExternalInterfaceDefaultRoute: <MANAGEMENT NET GATEWAY>
   ManagementInterfaceDefaultRoute: <MANAGEMENT NET GATEWAY>
   DnsServers: ['<DC DNS SERVER 1>', '<DC DNS SERVER 2>']
+{% if overcloud_neutron_vxlan_enabled | bool %}
   NeutronNetworkType: 'vxlan,vlan'
   NeutronTunnelTypes: 'vxlan'
+{% else %}
+  NeutronNetworkType: 'vlan'
+  NeutronTunnelTypes: 'vlan'
+{% endif %}
 {% if overcloud_external_lb_enabled | bool %}
   NeutronNetworkVLANRanges: 'datacentre:1:4094'
 {% else %}
