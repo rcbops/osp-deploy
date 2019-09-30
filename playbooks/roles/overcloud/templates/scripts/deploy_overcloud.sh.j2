@@ -32,10 +32,7 @@ openstack overcloud deploy \
    -e /home/stack/templates/32-tls-endpoints-public-ip.yaml \
    -e /home/stack/templates/40-ips-from-pool-all.yaml \
 {% if overcloud_barbican_enabled | bool %}
-   -e /usr/share/openstack-tripleo-heat-templates/environments/services/barbican.yaml \
-   -e /usr/share/openstack-tripleo-heat-templates/environments/barbican-backend-simple-crypto.yaml \
    -e /home/stack/templates/46-barbican-config.yaml \
-   -e /home/stack/templates/47-container-parameters-with-barbican.yaml \
 {% endif %}
 {% if overcloud_ceph_enabled | bool %}
    -e /home/stack/templates/50-ceph-ansible.yaml \
@@ -46,21 +43,20 @@ openstack overcloud deploy \
    -e /home/stack/templates/60-rackspace-tuning.yaml \
 {% endif %}
 {% if overcloud_rhn_enabled | bool %}
-   # uncomment once successful deploy has occurred
-   # -e /home/stack/templates/61-environment-rhel-registration.yaml \
-   # -e /home/stack/templates/62-rhel-registration-resource-registry.yaml \
+   -e /home/stack/templates/61-rhsm-registration.yaml \
 {% endif %}
 {% if overcloud_octavia_enabled | bool %}
    -e /home/stack/templates/55-octavia.yaml \
-   -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/octavia.yaml \
 {% endif %}
 {% if overcloud_sahara_enabled | bool %}
    -e /usr/share/openstack-tripleo-heat-templates/environments/services/sahara.yaml \
 {% endif %}
 {% if overcloud_manila_enabled | bool %}
+{% if overcloud_ceph_enabled | bool %}
    -e /usr/share/openstack-tripleo-heat-templates/environments/manila-cephfsnative-config.yaml \
    -e /usr/share/openstack-tripleo-heat-templates/environments/services/ceph-mds.yaml \
    -e /home/stack/templates/45-manila-ceph-config.yaml \
+{% endif %}
 {% endif %}
 {% if overcloud_ovn_enabled | bool %}
    -e /usr/share/openstack-tripleo-heat-templates/environments/services-docker/neutron-ovn-ha.yaml \

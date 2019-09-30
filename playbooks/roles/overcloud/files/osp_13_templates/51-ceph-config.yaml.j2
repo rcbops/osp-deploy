@@ -1,7 +1,7 @@
 parameter_defaults:
   CephAnsiblePlaybookVerbosity: 3
   CephAnsibleExtraConfig:
-    ceph_osd_docker_cpu_limit: 0  
+    ceph_osd_docker_cpu_limit: 0
   CephAnsibleDisksConfig:
     osd_objectstore: bluestore
     osd_scenario: lvm
@@ -12,3 +12,14 @@ parameter_defaults:
       - /dev/sde
       - /dev/sdf
       - /dev/sdg
+  CephPools:
+    - {"name": .rgw.root, "pg_num": 16, "pgp_num": 16, "application": rados}
+    - {"name": default.rgw.control, "pg_num": 16, "pgp_num": 16, "application": rados}
+    - {"name": default.rgw.meta, "pg_num": 16, "pgp_num": 16, "application": rados}
+    - {"name": default.rgw.log, "pg_num": 16, "pgp_num": 16, "application": rados}
+    - {"name": images, "pg_num": 64, "pgp_num": 128, "application": rbd}
+    - {"name": metrics, "pg_num": 64, "pgp_num": 64, "application":openstack_gnocchi}
+    - {"name": backups, "pg_num": 16, "pgp_num": 16, "application": rbd}
+    - {"name": vms, "pg_num": 128, "pgp_num": 256, "application": rbd}
+    - {"name": volumes, "pg_num": 256, "pgp_num": 512, "application": rbd}
+  CephPoolDefaultPgNum: 8
