@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2014-2018, Rackspace US, Inc.
+# Copyright 2014-2019, Rackspace US, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
