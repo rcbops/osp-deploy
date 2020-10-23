@@ -49,6 +49,7 @@
     - OS::TripleO::Services::CeilometerExpirer
     - OS::TripleO::Services::CeilometerAgentCentral
     - OS::TripleO::Services::CeilometerAgentNotification
+    - OS::TripleO::Services::CephClient
     - OS::TripleO::Services::CephExternal
     - OS::TripleO::Services::CephMds
     - OS::TripleO::Services::CephMgr
@@ -189,6 +190,8 @@
     - Storage
     - Management
   HostnameFormatDefault: '%stackname%-compute-%index%'
+  RoleParametersDefault:
+    TunedProfileName: "virtual-host"
   ctlplane_fixed_ip: True
   # Deprecated & backward-compatible values (FIXME: Make parameters consistent)
   # Set uses_deprecated_params to True if any deprecated params are used.
